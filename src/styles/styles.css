@@ -8,7 +8,7 @@
 
 /* Body styling with background image */
 body {
-  background-image: url('./bg_rangeready');
+  background-image: url('../assets/bg_rangeready');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
