@@ -25,7 +25,7 @@ body {
   width: 100%;
   max-width: 400px;
   padding: 2rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: #04471C; /*Heavy Forest Green for Containers*/
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   backdrop-filter: blur(10px);
@@ -99,17 +99,6 @@ button:hover {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-  }
-  
-  /* Styling for the container */
-  .container {
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
   }
   
   /* Header and title */
