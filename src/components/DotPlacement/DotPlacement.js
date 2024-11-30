@@ -35,6 +35,8 @@ function DotPlacement() {
       coordinates: dots, // Coordinates of placed dots
     };
 
+    console.log("Request Body:", postData);
+
     // Send a POST request to the API
     fetch("https://hackfd-rangeready.ca/api/insertActivityData", {
       method: "POST",
