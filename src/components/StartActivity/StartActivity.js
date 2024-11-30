@@ -5,10 +5,6 @@ function StartActivity() {
   const [activity, setActivity] = useState("");
   const [activities, setActivities] = useState([]); // Store activity options
   const [units, setUnits] = useState([]); // Store unit options
-  const [ongoingActivities, setOngoingActivities] = useState([]); // Store ongoing activities
-  const [modalOpen, setModalOpen] = useState(false); // To manage popup state
-  const [selectedActivity, setSelectedActivity] = useState(""); // To manage selected activity
-  const [activityTypes, setActivityTypes] = useState([]); // Store activity types for dropdown
 
   // Fetch activity options when component mounts
   useEffect(() => {
@@ -44,60 +40,65 @@ function StartActivity() {
         }
       })
       .catch((error) => console.error("Error fetching unit options:", error));
-
-    // Fetch ongoing activity data
-    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivity", {
-      method: "GET",
-      headers: {
-        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setOngoingActivities(data.data); // Populate ongoing activities
-        } else {
-          console.error("Failed to fetch ongoing activities:", data.message);
-        }
-      })
-      .catch((error) => console.error("Error fetching ongoing activities:", error));
   }, []);
 
-  // Fetch activity types for the dropdown inside the modal
-  const fetchActivityTypes = (activityName) => {
-    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivityType", {
-      method: "GET",
+  const addRow = () => {
+    setRows([...rows, { sn: "", name: "", email: "", unit: "" }]);
+  };
+
+  const removeRow = (index) => {
+    const newRows = [...rows];
+    newRows.splice(index, 1); // Remove the row at the given index
+    setRows(newRows);
+  };
+
+  const handleChange = (index, field, value) => {
+    const newRows = [...rows];
+    newRows[index][field] = value;
+    setRows(newRows);
+  };
+
+  const handleSubmit = () => {
+    // Basic validation to ensure activity and rows are filled
+    if (!activity) {
+      alert("Please select an activity.");
+      return;
+    }
+
+    // Ensure each row has valid values for sn, name, email, and unit
+    for (let i = 0; i < rows.length; i++) {
+      const { sn, name, email, unit } = rows[i];
+      if (!sn || !name || !email || !unit) {
+        alert("Please fill out all fields in each row.");
+        return;
+      }
+    }
+
+    const data = {
+      activity,
+      rows: rows.map(row => ({
+        ...row,
+        unit: row.unit.split(" ")[0],
+      })),
+    };
+
+    fetch("https://hackfd-rangeready.ca/api/registerActivity", {
+      method: "POST",
       headers: {
+        "Content-Type": "application/json",
         "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
       },
+      body: JSON.stringify(data),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setActivityTypes(data.data); // Populate activity types dropdown
+          alert("Activity Registered Successfully!");
         } else {
-          console.error("Failed to fetch activity types:", data.message);
+          alert("Error registering activity: " + data.message);
         }
       })
-      .catch((error) => console.error("Error fetching activity types:", error));
-  };
-
-  // Open the modal and fetch activity types
-  const handleAddData = (index) => {
-    const activityData = ongoingActivities[index];
-    setModalOpen(true); // Open the modal
-    setSelectedActivity(activityData.ActivityName); // Set selected activity name
-    fetchActivityTypes(activityData.ActivityName); // Fetch activity types for selected activity
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false); // Close the modal
-  };
-
-  const handleNext = () => {
-    // Handle the logic when Next button is clicked
-    console.log("Next button clicked with selected activity:", selectedActivity);
-    setModalOpen(false); // Close the modal on "Next"
+      .catch((error) => alert("Error registering activity!"));
   };
 
   return (
@@ -179,54 +180,8 @@ function StartActivity() {
       {/* Bottom Section */}
       <div className="ongoing-activity">
         <h2>Ongoing Activity</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>SN</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Unit</th>
-              <th>Activity Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ongoingActivities.map((activity, index) => (
-              <tr key={index}>
-                <td>{activity.SN}</td>
-                <td>{activity.NAME}</td>
-                <td>{activity.EMAIL}</td>
-                <td>{activity.UnitName}</td>
-                <td>{activity.ActivityName}</td>
-                <td>
-                  <button onClick={() => handleAddData(index)}>Add Data</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* Fetch and display ongoing activity here */}
       </div>
-
-      {/* Modal for Activity Data */}
-      {modalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Select Activity Type</h2>
-            <select>
-              <option value="">Select Activity Type</option>
-              {activityTypes.map((type, index) => (
-                <option key={index} value={type.name}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
-            <div>
-              <button onClick={handleCloseModal}>Close</button>
-              <button onClick={handleNext}>Next</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
