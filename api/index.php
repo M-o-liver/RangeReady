@@ -47,6 +47,9 @@ if (!checkBasicAuth()) {
 $method = $_SERVER['REQUEST_METHOD'];
 $request = $_SERVER['REQUEST_URI'];
 
+$parsedUrl = parse_url($request);
+$requestPath = $parsedUrl['path'];
+
 if ($method == 'POST') {
     if ($request == '/api/login') {
         $data = json_decode(file_get_contents('php://input'), true);
