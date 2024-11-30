@@ -24,7 +24,7 @@ jobs:
     - name: Build the Project
       run: npm run build
 
-    - name: Move backend code under /build
+    - name: Move backend code and public img under /build
       run: |
         mv ./api ./build/api
         mv ./img ./build/img
