@@ -1,0 +1,61 @@
+.menu-bar {
+  background-color: #333; /* Dark background for the menu bar */
+  padding: 0.5rem;
+  display: flex; /* Flexbox layout for horizontal alignment */
+  justify-content: center; /* Center the items horizontally */
+  align-items: center; /* Align items vertically */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.menu-list {
+  list-style: none; /* Remove default bullet points */
+  margin: 0;
+  padding: 0;
+  display: flex; /* Flexbox for horizontal layout */
+  gap: 1rem; /* Spacing between items */
+}
+
+.menu-list li {
+  display: flex; /* Ensure items align properly */
+  align-items: center; /* Center items vertically */
+}
+
+.menu-list button,
+.menu-list select {
+  padding: 0.5rem 1rem; /* Add padding for better appearance */
+  border: none;
+  border-radius: 4px;
+  background-color: #007BFF; /* Blue button background */
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.menu-list button:hover,
+.menu-list select:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.dropdown select {
+  background-color: #007BFF; /* Match dropdown color with buttons */
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.menu-list button:focus,
+.menu-list select:focus {
+  outline: 2px solid #0056b3; /* Add focus outline for accessibility */
+}
+
+/* Specific styles for the logout button */
+.menu-list li.logout-button button {
+  background-color: #dc3545; /* Red background for Logout */
+}
+
+.menu-list li.logout-button button:hover {
+  background-color: #c82333; /* Darker red on hover */
+}

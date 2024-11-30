@@ -52,22 +52,26 @@ if ($method == 'POST') {
         $data = json_decode(file_get_contents('php://input'), true);
         $response = handleLogin($data);
         echo json_encode($response);
-    } elseif ($request == '/api/register-score') {
-        // Expecting JSON data from frontend
+    } elseif ($request == '/api/registerActivity') {
         $data = json_decode(file_get_contents('php://input'), true);
-        $response = registerScore($data);
+        $response = registerActivity($data);
         echo json_encode($response);
     }
 } elseif ($method == 'GET') {
     if ($request == '/api/ping') {
         $results = getPong();
         echo json_encode($results);
-    } elseif ($request == '/api/results') {
-        $results = getResults();
+    } elseif ($request == '/api/getActivitiesOptions') {
+        $results = getActivitiesOption();
         echo json_encode($results);
-    } elseif (preg_match('/\/api\/score\/(.+)/', $request, $matches)) {
-        $service_number = $matches[1];
-        $result = getScore($service_number);
-        echo json_encode($result);
+    } elseif ($request == '/api/getUnitOptions') {
+        $results = getUnitOptions();
+        echo json_encode($results);
+    } elseif ($request == '/api/getOnGoingActivity') {
+        $results = getOnGoingActivity();
+        echo json_encode($results);
+    } elseif ($request == '/api/getOnGoingActivityType') {
+        $response = getOnGoingActivityType($data);
+        echo json_encode($results);
     }
 }

@@ -1,11 +1,6 @@
 <?php
 // routes.php
 
-// Return Pong!
-function getPong() {
-    return "Pong!";
-}
-
 /*
 How to call:
     $data = [
@@ -113,71 +108,290 @@ function handleLogin($data) {
 }
 
 
-// Register a score endpoint - Dummy query to show how to do insert and return message "success"
-function registerScore($data) {
+function getPong() {
+    return "Pong!";
+}
+
+function getActivitiesOption() {
     global $pdo;
 
-    // Check if required data is present
-    if (!isset($data['service_number'], $data['unit'], $data['activity_type'], $data['total_bullets'])) {
+    try {
+        // Use query method to fetch all results
+        $stmt = $pdo->query("SELECT Name FROM Activities");
+
+        // Check if the query was successful
+        if ($stmt) {
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Check if results are found
+            if ($results) {
+                http_response_code(200);  // OK
+                return [
+                    'success' => true,
+                    'data' => $results
+                ];
+            } else {
+                http_response_code(404);  // Not Found
+                return [
+                    'success' => false,
+                    'message' => 'No activities found'
+                ];
+            }
+        } else {
+            // In case the query failed
+            http_response_code(500);  // Internal Server Error
+            return [
+                'success' => false,
+                'message' => 'Failed to execute the query'
+            ];
+        }
+    } catch (Exception $e) {
+        // Log the error details for debugging
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Handle general exceptions
+        http_response_code(500);  // Internal Server Error
+        return [
+            'success' => false,
+            'message' => 'An error occurred. Please try again later.'
+        ];
+    }
+}
+
+
+function getUnitOptions() {
+    global $pdo;
+
+    try {
+        // Use query method to fetch all results
+        $stmt = $pdo->query("SELECT CONCAT(UIC, ' - ', Name) AS Unit FROM UnitTable");
+
+        // Check if the query was successful
+        if ($stmt) {
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Check if results are found
+            if ($results) {
+                http_response_code(200);  // OK
+                return [
+                    'success' => true,
+                    'data' => $results
+                ];
+            } else {
+                http_response_code(404);  // Not Found
+                return [
+                    'success' => false,
+                    'message' => 'No units found'
+                ];
+            }
+        } else {
+            // In case the query failed
+            http_response_code(500);  // Internal Server Error
+            return [
+                'success' => false,
+                'message' => 'Failed to execute the query'
+            ];
+        }
+    } catch (Exception $e) {
+        // Log the error details for debugging
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Handle general exceptions
+        http_response_code(500);  // Internal Server Error
+        return [
+            'success' => false,
+            'message' => 'An error occurred. Please try again later.'
+        ];
+    }
+}
+
+function getOnGoingActivity() {
+    global $pdo;
+
+    try {
+        // Use query method to fetch all results
+        $stmt = $pdo->query("SELECT u.SN, u.NAME, u.EMAIL, ut.Name AS UnitName, a.Name AS ActivityName FROM ActivityRegister ar JOIN User u ON ar.SN = u.SN JOIN UnitTable ut ON u.UnitTableID = ut.id JOIN Activities a ON ar.Activity = a.id WHERE DATE(ar.DatetimeStamp) = CURDATE()");
+
+        // Check if the query was successful
+        if ($stmt) {
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Check if results are found
+            if ($results) {
+                http_response_code(200);  // OK
+                return [
+                    'success' => true,
+                    'data' => $results
+                ];
+            } else {
+                http_response_code(404);  // Not Found
+                return [
+                    'success' => false,
+                    'message' => 'No On Going Activity found'
+                ];
+            }
+        } else {
+            // In case the query failed
+            http_response_code(500);  // Internal Server Error
+            return [
+                'success' => false,
+                'message' => 'Failed to execute the query'
+            ];
+        }
+    } catch (Exception $e) {
+        // Log the error details for debugging
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Handle general exceptions
+        http_response_code(500);  // Internal Server Error
+        return [
+            'success' => false,
+            'message' => 'An error occurred. Please try again later.'
+        ];
+    }
+}
+
+function getOnGoingActivityType() {
+    global $pdo;
+
+    try {
+        // Use query method to fetch all results
+        $stmt = $pdo->query("SELECT ActivityType FROM u288274412_hackfg.ActivityDetails where RefActivity = (Select id From Activities where Name = "PWT 1")");
+
+        // Check if the query was successful
+        if ($stmt) {
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Check if results are found
+            if ($results) {
+                http_response_code(200);  // OK
+                return [
+                    'success' => true,
+                    'data' => $results
+                ];
+            } else {
+                http_response_code(404);  // Not Found
+                return [
+                    'success' => false,
+                    'message' => 'No On Going Activity found'
+                ];
+            }
+        } else {
+            // In case the query failed
+            http_response_code(500);  // Internal Server Error
+            return [
+                'success' => false,
+                'message' => 'Failed to execute the query'
+            ];
+        }
+    } catch (Exception $e) {
+        // Log the error details for debugging
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Handle general exceptions
+        http_response_code(500);  // Internal Server Error
+        return [
+            'success' => false,
+            'message' => 'An error occurred. Please try again later.'
+        ];
+    }
+}
+
+function registerActivity($data) {
+    global $pdo;
+
+    // Validate the incoming data
+    if (empty($data['activity']) || empty($data['rows'])) {
         http_response_code(400);  // Bad Request
-        return ['status' => 'error', 'message' => 'Missing required data'];
+        return [
+            'success' => false,
+            'message' => 'Activity and rows data are required.'
+        ];
     }
 
-    // Prepare the SQL query with placeholders
-    $sql = "INSERT INTO scores (service_number, unit, activity_type, total_bullets) VALUES (:service_number, :unit, :activity_type, :total_bullets)";
-    $stmt = $pdo->prepare($sql);
+    // Check if each row contains the necessary fields
+    foreach ($data['rows'] as $row) {
+        if (empty($row['sn']) || empty($row['name']) || empty($row['email']) || empty($row['unit'])) {
+            http_response_code(400);  // Bad Request
+            return [
+                'success' => false,
+                'message' => 'Each row must contain sn, name, email, and unit.'
+            ];
+        }
+    }
 
-    // Bind the parameters to the query
-    $stmt->bindParam(':service_number', $data['service_number'], PDO::PARAM_STR);
-    $stmt->bindParam(':unit', $data['unit'], PDO::PARAM_STR);
-    $stmt->bindParam(':activity_type', $data['activity_type'], PDO::PARAM_STR);
-    $stmt->bindParam(':total_bullets', $data['total_bullets'], PDO::PARAM_INT);
+    try {
+        // Start a transaction to ensure data integrity
+        $pdo->beginTransaction();
 
-    // Execute the query
-    if ($stmt->execute()) {
+        // Check if the activity already exists and retrieve its ID
+        $stmt = $pdo->prepare("SELECT id FROM Activities WHERE Name = :activity_name");
+        $stmt->execute(['activity_name' => $data['activity']]);
+        $activity = $stmt->fetch();
+
+        if (!$activity) {
+            // If the activity does not exist, return an error
+            http_response_code(400);  // Bad Request
+            return [
+                'success' => false,
+                'message' => 'The specified activity does not exist.'
+            ];
+        }
+
+        $activityId = $activity['id'];  // Get the ID of the existing activity
+
+        // Prepare the statement to insert participant data
+        $stmt = $pdo->prepare("INSERT INTO User (SN, NAME, EMAIL, UnitTableID)
+                               SELECT :sn, :name, :email, id
+                               FROM UnitTable
+                               WHERE UIC = :unit
+                               AND NOT EXISTS (SELECT 1 FROM User WHERE SN = :sn)");
+
+        // Now insert into ActivityRegister for the same user
+        $stmtActivityRegister = $pdo->prepare("INSERT INTO ActivityRegister (SN, Activity, DatetimeStamp)
+        VALUES (:sn, :activity_id, NOW())");
+
+        // Insert each participant's data
+        foreach ($data['rows'] as $row) {
+            $stmt->execute([
+                'sn' => $row['sn'],
+                'name' => $row['name'],
+                'email' => $row['email'],
+                'unit' => $row['unit']
+            ]);
+
+            $stmtActivityRegister->execute([
+                'sn' => $row['sn'],
+                'activity_id' => $activityId
+            ]);
+        }
+
+        // Commit the transaction
+        $pdo->commit();
+
         http_response_code(200);  // OK
-        return ['status' => 'success'];
-    } else {
+        return [
+            'success' => true,
+            'message' => 'Activity and participants registered successfully.'
+        ];
+    } catch (Exception $e) {
+        // Roll back the transaction in case of an error
+        $pdo->rollBack();
+
+        // Log the error details
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Return an internal server error response
         http_response_code(500);  // Internal Server Error
-        return ['status' => 'error', 'message' => 'Failed to register score'];
+        return [
+            'success' => false,
+            'message' => 'An error occurred while registering the activity. Please try again later.'
+        ];
     }
 }
 
-
-// Get all results endpoint - Dummy query to show how to return all results from the DB
-function getResults() {
-    global $pdo;
-
-    // Use query method to fetch all results
-    $stmt = $pdo->query("SELECT * FROM scores");
-
-    if ($stmt) {
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        http_response_code(200);  // OK
-        return $results;
-    } else {
-        http_response_code(500);  // Internal Server Error
-        return ['status' => 'error', 'message' => 'Failed to fetch results'];
-    }
-}
-
-// Fetch individual score endpoint - Dummy query to show how to return only specific column from the DB
-function getScore($service_number) {
-    global $pdo;
-
-    // Prepare the query to fetch a single score by service_number
-    $stmt = $pdo->prepare("SELECT * FROM scores WHERE service_number = :service_number");
-
-    // Bind the service number parameter
-    $stmt->bindParam(':service_number', $service_number, PDO::PARAM_STR);
-
-    // Execute the query
-    if ($stmt->execute()) {
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        http_response_code(200);  // OK
-        return $result;
-    } else {
-        http_response_code(500);  // Internal Server Error
-        return ['status' => 'error', 'message' => 'Failed to fetch score'];
-    }
-}

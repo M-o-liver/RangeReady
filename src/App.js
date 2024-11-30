@@ -1,7 +1,9 @@
 import './styles/styles.css';
-import React, { useState, useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Menu from "./components/Menu/Menu";
+import StartActivity from "./components/StartActivity/StartActivity";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   useEffect(() => {
@@ -21,7 +23,7 @@ function App() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=`, // Horrific, but it's hackaton :P
+          "Authorization": `Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=`, // Very very bad practice but it's hackaton!
         },
         body: JSON.stringify({ username, password }),
       });
@@ -46,38 +48,43 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
-      {!isLoggedIn ? (
-        <LoginForm 
-          username={username} 
-          password={password} 
-          setUsername={setUsername} 
-          setPassword={setPassword} 
-          message={message} 
-          handleLogin={handleLogin} 
-        /> 
-      ) : ( //Horrific, but it's a hackathon!
-        <div> 
-          <header style={{ 
-            backgroundColor: '#000', 
-            color: 'white', 
-            padding: '1rem',
-            marginBottom: '1rem'
-          }}>
-            <h2>Range Ready</h2>
-          </header>
-          <div style={{ 
-            backgroundColor: '#f5f5f5', 
-            padding: '2rem', 
-            minHeight: '100vh'
-          }}>
-            <h1>Welcome, {username}!</h1>
-            <Menu />
-            <button onClick={handleLogout}>Logout</button>
+    <Router>
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        {!isLoggedIn ? (
+          <LoginForm 
+            username={username} 
+            password={password} 
+            setUsername={setUsername} 
+            setPassword={setPassword} 
+            message={message} 
+            handleLogin={handleLogin} 
+          />
+        ) : (
+          <div>
+            <header style={{
+              backgroundColor: '#000',
+              color: 'white',
+              padding: '1rem',
+              marginBottom: '1rem'
+            }}>
+              <h2>Range Ready</h2>
+            </header>
+            <div style={{
+              backgroundColor: '#f5f5f5',
+              padding: '2rem',
+              minHeight: '100vh'
+            }}>
+              <h1>Welcome, {username}!</h1>
+              <Menu handleLogout={handleLogout} />  {}
+              <Routes>
+                <Route path="/" element={<div>Welcome to Range Ready!</div>} />
+                <Route path="/start-activity" element={<StartActivity />} />
+              </Routes>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </Router>
   );
 }
 
