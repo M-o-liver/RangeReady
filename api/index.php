@@ -51,29 +51,29 @@ $parsedUrl = parse_url($request);
 $requestPath = $parsedUrl['path'];
 
 if ($method == 'POST') {
-    if ($request == '/api/login') {
+    if (requestPath == '/api/login') {
         $data = json_decode(file_get_contents('php://input'), true);
         $response = handleLogin($data);
         echo json_encode($response);
-    } elseif ($request == '/api/registerActivity') {
+    } elseif (requestPath == '/api/registerActivity') {
         $data = json_decode(file_get_contents('php://input'), true);
         $response = registerActivity($data);
         echo json_encode($response);
     }
 } elseif ($method == 'GET') {
-    if ($request == '/api/ping') {
+    if (requestPath == '/api/ping') {
         $response = getPong();
         echo json_encode($response);
-    } elseif ($request == '/api/getActivitiesOptions') {
+    } elseif (requestPath == '/api/getActivitiesOptions') {
         $response = getActivitiesOption();
         echo json_encode($response);
-    } elseif ($request == '/api/getUnitOptions') {
+    } elseif (requestPath == '/api/getUnitOptions') {
         $response = getUnitOptions();
         echo json_encode($response);
-    } elseif ($request == '/api/getOnGoingActivity') {
+    } elseif (requestPath == '/api/getOnGoingActivity') {
         $response = getOnGoingActivity();
         echo json_encode($response);
-    } elseif ($request == '/api/getOnGoingActivityType') {
+    } elseif (requestPath == '/api/getOnGoingActivityType') {
         // Ensure activityName is set
         if (isset($_GET['activityName'])) {
             $data = ['activityName' => $_GET['activityName']];
