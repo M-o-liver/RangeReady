@@ -1,0 +1,19 @@
+{
+    "name": "range-ready/api",
+    "description": "API/Backend for React frontend",
+    "type": "project",
+    "require": {
+      "php": "^7.4|^8.0",
+      "vlucas/phpdotenv": "^5.4"
+    },
+    "autoload": {
+      "psr-4": {
+        "App\\": "./"
+      }
+    },
+    "scripts": {
+      "post-install-cmd": [
+        "php -r \"copy('.env.example', '.env');\""
+      ]
+    }
+  }

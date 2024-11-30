@@ -24,11 +24,11 @@ jobs:
     - name: Build the Project
       run: npm run build
 
-    - name: Move Backend into build
+    - name: Move backend code under /build
       run: |
         mv ./api ./build/api
 
-    - name: Set Up PHP and Composer
+    - name: Set up PHP and Composer
       run: |
         # Install PHP
         sudo apt-get update
@@ -42,7 +42,7 @@ jobs:
         cd ./build/api
         composer install --no-interaction
 
-    - name: Deploy to Hostinger
+    - name: Deploy /build to Hostinger
       env:
         HOST: ${{ secrets.HOSTINGER_HOST }}
         USERNAME: ${{ secrets.HOSTINGER_USERNAME }}
