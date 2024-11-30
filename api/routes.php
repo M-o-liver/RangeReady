@@ -414,6 +414,9 @@ function registerActivity($data) {
 }
 
 function insertActivityData($data) {
-    error_log($data);
-    return $data;
+    error_log(print_r($data, true));
+    return [
+        'success' => false,
+        'message' => 'An error occurred while registering the activity. Please try again later.'
+    ];
 }
