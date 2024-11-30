@@ -37,6 +37,10 @@ jobs:
         echo "${{ secrets.HOSTINGER_SSH_KEY }}" > private_key
         chmod 600 private_key
 
-        # Deploy build contents from the frontend/build directory
+        # Deploy build contents from the frontend/build directory to frontend/ on the remote server
         rsync -avz -e "ssh -p 65002 -i private_key -o StrictHostKeyChecking=no" \
-          --delete frontend/build/ $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
+          --delete frontend/build/ $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/frontend/
+
+        # Deploy the rest of the files (excluding the frontend/ directory itself) to the server, skipping /frontend
+        rsync -avz -e "ssh -p 65002 -i private_key -o StrictHostKeyChecking=no" \
+          --delete --exclude=frontend/ . $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
