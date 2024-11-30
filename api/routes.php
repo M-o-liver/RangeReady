@@ -262,7 +262,7 @@ function getOnGoingActivityType($data) {
         http_response_code(400);  // Bad Request
         return [
             'success' => false,
-            'message' => 'Activity name is requiredsss'
+            'message' => 'Activity name is required'
         ];
     }
 

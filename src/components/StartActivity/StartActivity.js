@@ -270,8 +270,8 @@ function StartActivity() {
           >
             <option value="">Select Activity Type</option>
             {activityTypes.map((activityType, index) => (
-              <option key={index} value={activityType.Name}>
-                {activityType.Name}
+              <option key={index} value={activityType.ActivityType}>
+                {activityType.ActivityType}
               </option>
             ))}
           </select>
