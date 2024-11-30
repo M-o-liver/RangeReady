@@ -417,8 +417,6 @@ function insertActivityData($data) {
     global $pdo;
 
     try {
-        // Step 1: Retrieve RefActDet by matching ActivityType and ActivityName
-        // Get RefActivity ID from Activities table by ActivityName
         $query = "SELECT id FROM Activities WHERE Name = :activityName";
         $stmt = $pdo->prepare($query);
         $stmt->execute(['activityName' => $data['activityName']]);
@@ -445,15 +443,68 @@ function insertActivityData($data) {
 
         $refActDetId = $activityDetails['id'];
 
-        $coordinates = json_encode($data['coordinates']); // Stored as a JSON string
+        // Prepare coordinates for the API request
+        $coordinatesForApi = array_map(function($coord) {
+            return [$coord['x'], $coord['y']]; // Format [x, y] for the API request
+        }, $data['coordinates']);
 
-        // Step 3: Insert into ActivityEvent table
-        $query = "INSERT INTO ActivityEvent (RefActDet, SN, createdAt, Coordinates) VALUES (:refActDetId, :sn, NOW(), :coordinates)";
+        // Now make the POST call to the specified API endpoint before Step 3
+
+        $url = 'https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped';
+        $headers = [
+            'Authorization: Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w',
+            'Content-Type: application/json'
+        ];
+
+        $body = json_encode([
+            'parameters' => [
+                'event' => [
+                    'coordinates' => $coordinatesForApi, // Use the formatted coordinates for the API
+                    'num_clusters' => 1
+                ]
+            ]
+        ]);
+
+        // Initialize cURL session
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+
+        // Execute the POST request
+        $response = curl_exec($ch);
+
+        // Check for errors in the cURL request
+        if (curl_errno($ch)) {
+            throw new Exception('cURL error: ' . curl_error($ch));
+        }
+
+        // Close cURL session
+        curl_close($ch);
+
+        // Response
+        $responseData = json_decode($response, true);
+
+        if (isset($responseData['executionResult']['success']['returnValue']['group_size'])) {
+            $groupSize = $responseData['executionResult']['success']['returnValue']['group_size'];
+        } else {
+            throw new Exception("Group size not found in the response.");
+        }
+
+        // Step 3: Insert into ActivityEvent table with original coordinates format (x, y)
+        $coordinatesForDb = json_encode($data['coordinates']); // Store original {x, y} format as JSON string
+
+        $query = "INSERT INTO ActivityEvent (RefActDet, SN, createdAt, Coordinates, GroupScore) VALUES (:refActDetId, :sn, NOW(), :coordinates, :groupSize)";
         $stmt = $pdo->prepare($query);
         $stmt->execute([
             'refActDetId' => $refActDetId,
             'sn' => $data['sn'],
-            'coordinates' => $coordinates
+            'coordinates' => $coordinatesForDb,
+            'groupSize' => $groupSize
         ]);
 
         // Set HTTP status code for success (200 OK)
@@ -462,8 +513,10 @@ function insertActivityData($data) {
         // Return success message
         return [
             'success' => true,
-            'message' => 'Activity data registered successfully.'
+            'message' => 'Activity data registered successfully and POST request sent.',
+            'api_response' => $response // Return the API response if needed
         ];
+
     } catch (Exception $e) {
         // Handle any errors
         error_log($e->getMessage());
