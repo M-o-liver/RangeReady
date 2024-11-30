@@ -24,10 +24,6 @@ jobs:
     - name: Build the Project
       run: npm run build
 
-    - name: Print SSH private key for debugging (ONLY for testing)
-      run: |
-        echo "${{ secrets.HOSTINGER_SSH_KEY }}"
-
     - name: Deploy to Hostinger
       env:
         HOST: ${{ secrets.HOSTINGER_HOST }}
