@@ -28,6 +28,20 @@ jobs:
       run: |
         mv ./api ./build/api
 
+    - name: Set Up PHP and Composer
+      run: |
+        # Install PHP
+        sudo apt-get update
+        sudo apt-get install -y php-cli php-zip unzip curl
+
+        # Install Composer
+        curl -sS https://getcomposer.org/installer | php
+        sudo mv composer.phar /usr/local/bin/composer
+
+        # Navigate to the 'api' folder and install PHP dependencies
+        cd ./build/api
+        composer install --no-interaction
+
     - name: Deploy to Hostinger
       env:
         HOST: ${{ secrets.HOSTINGER_HOST }}
