@@ -1,7 +1,12 @@
 <?php
 // routes.php
 
-// Register a score endpoint
+// Return Pong!
+function getPong() {
+    return "Pong!";
+}
+
+// Register a score endpoint - Dummy query to show how to do insert and return message "success"
 function registerScore($data) {
     global $conn;
     $sql = "INSERT INTO scores (service_number, unit, activity_type, total_bullets) VALUES (:service_number, :unit, :activity_type, :total_bullets)";
@@ -15,7 +20,7 @@ function registerScore($data) {
     return ['status' => 'success'];
 }
 
-// Get all results endpoint
+// Get all results endpoint - Dummy query to show how to return all return from DB
 function getResults() {
     global $conn;
     $stmt = $conn->query("SELECT * FROM scores");
@@ -23,7 +28,7 @@ function getResults() {
     return $results;
 }
 
-// Fetch individual score endpoint
+// Fetch individual score endpoint - Dummy query to show how to return only specific column from the DB
 function getScore($service_number) {
     global $conn;
     $stmt = $conn->prepare("SELECT * FROM scores WHERE service_number = :service_number");

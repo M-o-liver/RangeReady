@@ -61,7 +61,8 @@ switch ($method) {
 
     case 'GET':
         if ($request == '/api/ping') {
-            echo json_encode("PONG!");
+            $results = getPong();
+            echo json_encode($results);
         } elseif ($request == '/api/results') {
             $results = getResults();
             echo json_encode($results);
