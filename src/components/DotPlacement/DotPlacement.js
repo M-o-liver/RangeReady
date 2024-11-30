@@ -42,6 +42,7 @@ function DotPlacement() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
       },
       body: JSON.stringify(postData),
     })

@@ -414,4 +414,6 @@ function registerActivity($data) {
 }
 
 function insertActivityData($data) {
+    error_log($data);
+    return $data;
 }
