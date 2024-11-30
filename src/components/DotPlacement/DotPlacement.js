@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom"; // Import useLocation to access 
 
 function DotPlacement() {
   const { state } = useLocation(); // Get the state from the router
-  const { sn, activityType } = state || {}; // Destructure sn and activityType from the state
+  const { sn, activityType, activityName } = state || {}; // Destructure sn and activityType from the state
   const [dots, setDots] = useState([]); // Store dot coordinates
   const [selectedActivityType, setSelectedActivityType] = useState(activityType || ""); // Store selected activity type from state
   const imageUrl = "./img/Target.jpg";
@@ -31,6 +31,7 @@ function DotPlacement() {
     // Prepare the data to be sent in the POST request
     const postData = {
       sn, // SN passed from the parent component via navigate state
+      activityName,
       activityType: selectedActivityType, // Selected Activity Type
       coordinates: dots, // Coordinates of placed dots
     };

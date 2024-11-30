@@ -12,6 +12,7 @@ function StartActivity() {
   const [selectedActivityType, setSelectedActivityType] = useState(""); // Store selected activity type
   const navigate = useNavigate();
   const [selectedSN, setSelectedSN] = useState(null);
+  const [selectedActivityName, setSelectedActivityName] = useState(null);
 
   // Fetch activity options
   useEffect(() => {
@@ -73,6 +74,7 @@ function StartActivity() {
 
     const sn = activityData.SN;
     setSelectedSN(sn);
+    setSelectedActivityName(activityName);
 
     const url = `https://hackfd-rangeready.ca/api/getOnGoingActivityType?activityName=${encodeURIComponent(activityName)}`;
   
@@ -102,8 +104,9 @@ function StartActivity() {
   const handleNext = () => {
     console.log("Next button clicked with activity type:", selectedActivityType);
     console.log("Selected SN:", selectedSN);
+    console.log("Selected SN:", selectedActivityName);
     // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
-    navigate("/dot-placement", { state: { sn: selectedSN, activityType: selectedActivityType } });
+    navigate("/dot-placement", { state: { sn: selectedSN, activityName: selectedActivityName, activityType: selectedActivityType } });
     setShowModal(false); // Close the modal
   };
 
