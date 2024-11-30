@@ -24,6 +24,10 @@ jobs:
     - name: Build the Project
       run: npm run build
 
+    - name: Move Backend into build
+      run: |
+        mv ./api ./build/api
+
     - name: Deploy to Hostinger
       env:
         HOST: ${{ secrets.HOSTINGER_HOST }}
