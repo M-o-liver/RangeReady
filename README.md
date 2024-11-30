@@ -6,7 +6,7 @@ A web application for tracking and analyzing Canadian Armed Forces (CAF) range p
 
 ## Overview
 
-This application streamlines the process of recording and analyzing marksmanship data on CAF ranges. It provides an intuitive interface for range officers to input shooting data and retrieve comprehensive performance analytics.
+This application streamlines the process of recording and analyzing marksmanship data on CAF ranges. It provides an intuitive interface for range conductors to input shooting data and retrieve comprehensive performance analytics.
 
 ## Features
 
@@ -33,20 +33,20 @@ This application streamlines the process of recording and analyzing marksmanship
 *Range Data Collection*
 - Service number identification
 - Unit tracking
-- PWT serial tracking
-- Ammunition allocation tracking (as necessary)
+- PWT & serial tracking
+- Ammunition allocation tracking
 - Interactive Figure 11 target interface
-- Coordinate-based shot placement recording
+- Touch-based shot placement recording
 
 *Data Analysis*
 - Individual performance tracking
-- PWT-specific analytics (C7, Leopard 2) 
+- PWT specific analytics 
 - Performance trending visualization
 - Unit performance comparisons
 
 ## Minimum Viable Product (MVP)
 
-*Phase 1 Deliverables*
+*36hr Deliverables*
 - Range data entry system with interactive target interface
 - Individual soldier performance visualization
 - Basic performance graphing capabilities
@@ -55,6 +55,7 @@ This application streamlines the process of recording and analyzing marksmanship
 
 - Unit leaderboard implementation
 - Unit performance visualization
+- Advanced weapon platform support
 - Advanced statistical analysis
 - Enhanced visualization options
 - Performance trend forecasting
@@ -63,11 +64,10 @@ This application streamlines the process of recording and analyzing marksmanship
 
 This project is being developed as part of the CAF-sponsored Hackathon: HACKFD. The current focus (10:06PM, 29 Nov) is on delivering core functionality within the hackathon timeframe. 
 
-## Installation (TBC)
-
-# Install XAMPP
-# Clone repository into /xampp/apache/htdocs/rangeready
-# Open XAMPP
+## Installation 
+ 
+# Clone repository
+# Run 
 - Select 
 # Clone repository
 git clone [repository-url]
