@@ -18,7 +18,9 @@ switch ($method) {
         break;
 
     case 'GET':
-        if ($request == '/api/results') {
+        if ($request == '/api/ping') {
+            echo json_encode("PONG!");
+        } elseif ($request == '/api/results') {
             $results = getResults();
             echo json_encode($results);
         } elseif (preg_match('/\/api\/score\/(.+)/', $request, $matches)) {
