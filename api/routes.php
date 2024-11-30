@@ -452,14 +452,31 @@ function insertActivityData($data) {
 
         $url = 'https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped';
         $headers = [
-            'Authorization: Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w',
-            'Content-Type: application/json'
+            'Content-Type: application/json',
+            'Authorization: Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w'
         ];
 
+        /*
         $body = json_encode([
             'parameters' => [
                 'event' => [
                     'coordinates' => $coordinatesForApi, // Use the formatted coordinates for the API
+                    'num_clusters' => 1
+                ]
+            ]
+        ]);
+        */
+
+        $body = json_encode([
+            'parameters' => [
+                'event' => [
+                    'coordinates' => [
+                        [557.5, 800],
+                        [580.5, 760],
+                        [567.5, 840],
+                        [515.5, 890],
+                        [549.5, 720]
+                    ],
                     'num_clusters' => 1
                 ]
             ]
