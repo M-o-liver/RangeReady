@@ -55,13 +55,26 @@ function App() {
           setPassword={setPassword} 
           message={message} 
           handleLogin={handleLogin} 
-        />
-      ) : (
-        <div>
-          <h1>Welcome, {username}!</h1>
-          <p>You have successfully logged in.</p>
-          <button onClick={handleLogout}>Logout</button>
-          <Menu />
+        /> 
+      ) : ( //Horrific, but it's a hackathon!
+        <div> 
+          <header style={{ 
+            backgroundColor: '#000', 
+            color: 'white', 
+            padding: '1rem',
+            marginBottom: '1rem'
+          }}>
+            <h2>Range Ready</h2>
+          </header>
+          <div style={{ 
+            backgroundColor: '#f5f5f5', 
+            padding: '2rem', 
+            minHeight: '100vh'
+          }}>
+            <h1>Welcome, {username}!</h1>
+            <Menu />
+            <button onClick={handleLogout}>Logout</button>
+          </div>
         </div>
       )}
     </div>
