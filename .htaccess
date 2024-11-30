@@ -1,4 +1,0 @@
-# Redirect all requests to index.html
-RewriteEngine On
-RewriteBase /frontend/
-RewriteRule ^ index.html [QSA,L]
