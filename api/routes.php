@@ -254,37 +254,52 @@ function getOnGoingActivity() {
     }
 }
 
-function getOnGoingActivityType() {
+function getOnGoingActivityType($data) {
     global $pdo;
 
+    // Ensure we get the 'activityName' from the request data
+    $activityName = isset($data['activityName']) ? $data['activityName'] : null;
+
+    // Check if the activity name is provided
+    if (!$activityName) {
+        http_response_code(400);  // Bad Request
+        return [
+            'success' => false,
+            'message' => 'Activity name is required'
+        ];
+    }
+
     try {
-        // Use query method to fetch all results
-        $stmt = $pdo->query("SELECT ActivityType FROM u288274412_hackfg.ActivityDetails where RefActivity = (Select id From Activities where Name = "PWT 1")");
+        // Prepare the query to fetch activity types based on the provided activity name
+        $stmt = $pdo->prepare("
+            SELECT ActivityType
+            FROM ActivityDetails
+            WHERE RefActivity = (
+                SELECT id
+                FROM Activities
+                WHERE Name = ?
+            )
+        ");
 
-        // Check if the query was successful
-        if ($stmt) {
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Execute the query, binding the activityName to the ? placeholder
+        $stmt->execute([$activityName]);
 
-            // Check if results are found
-            if ($results) {
-                http_response_code(200);  // OK
-                return [
-                    'success' => true,
-                    'data' => $results
-                ];
-            } else {
-                http_response_code(404);  // Not Found
-                return [
-                    'success' => false,
-                    'message' => 'No On Going Activity found'
-                ];
-            }
+        // Fetch the results
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Check if results are found
+        if ($results) {
+            http_response_code(200);  // OK
+            return [
+                'success' => true,
+                'data' => $results
+            ];
         } else {
-            // In case the query failed
-            http_response_code(500);  // Internal Server Error
+            // If no matching activities were found
+            http_response_code(404);  // Not Found
             return [
                 'success' => false,
-                'message' => 'Failed to execute the query'
+                'message' => 'No activity types found for the given activity name'
             ];
         }
     } catch (Exception $e) {
