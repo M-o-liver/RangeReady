@@ -12,7 +12,6 @@ $dbPassword = $_ENV['DB_PASSWORD'];
 try {
     $pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUsername, $dbPassword);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Connection successful!";
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
