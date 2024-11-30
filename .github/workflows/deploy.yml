@@ -19,10 +19,14 @@ jobs:
         node-version: '16'
 
     - name: Install Dependencies
-      run: npm install
+      run: |
+        cd frontend
+        npm install
 
     - name: Build the Project
-      run: npm run build
+      run: |
+        cd frontend
+        npm run build
 
     - name: Deploy to Hostinger
       env:
@@ -33,6 +37,6 @@ jobs:
         echo "${{ secrets.HOSTINGER_SSH_KEY }}" > private_key
         chmod 600 private_key
 
-        # Deploy build contents
+        # Deploy build contents from the frontend/build directory
         rsync -avz -e "ssh -p 65002 -i private_key -o StrictHostKeyChecking=no" \
-          --delete build/ $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
+          --delete frontend/build/ $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
