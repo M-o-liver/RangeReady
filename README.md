@@ -26,7 +26,7 @@ This application streamlines the process of recording and analyzing marksmanship
 |-----------|------------|
 | Frontend  | React      |
 | Backend   | PHP        |
-| Database  | MariaDB    |
+| Database  | MySQL      |
 
 ## Implementation Details
 
