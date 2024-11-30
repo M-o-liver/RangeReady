@@ -43,4 +43,5 @@ jobs:
 
         # Deploy the rest of the files (excluding the frontend/ directory itself) to the server, skipping /frontend
         rsync -avz -e "ssh -p 65002 -i private_key -o StrictHostKeyChecking=no" \
-          --delete --exclude=frontend/ . $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
+          --delete --exclude=frontend/ --exclude=.git --exclude=.github --exclude=.gitignore --exclude=private_key --exclude=LICENSE --exclude=README.md \
+          . $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
