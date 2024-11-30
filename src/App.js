@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import './styles/styles.css';
+import React, { useState, useEffect  } from "react";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Menu from "./components/Menu/Menu";
 
 function App() {
+  useEffect(() => {
+    document.title = "Range Ready";
+  }, []);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);

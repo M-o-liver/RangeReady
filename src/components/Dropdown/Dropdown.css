@@ -1,0 +1,38 @@
+/* Dropdown container styling */
+.dropdown-container {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    min-width: 160px;
+  }
+  
+  /* Styling for each button in the dropdown */
+  .dropdown-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 5px 0; /* space between buttons */
+  }
+  
+  .dropdown-btn:hover {
+    background-color: #2980b9;
+    transform: scale(1.05); /* subtle scale effect on hover */
+  }
+  
+  .dropdown-btn:focus {
+    outline: none;
+    border: 2px solid #2980b9;
+  }
+  

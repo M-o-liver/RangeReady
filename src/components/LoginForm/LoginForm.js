@@ -29,7 +29,7 @@ function LoginForm({ username, password, setUsername, setPassword, message, hand
         </div>
         <button type="submit">Login</button>
       </form>
-      {message && <p style={{ color: "red" }}>{message}</p>}
+      {message && <p className="error">{message}</p>}
     </div>
   );
 }
