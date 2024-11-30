@@ -43,6 +43,12 @@ jobs:
         cd ./build/api
         composer install --no-interaction
 
+    - name: Install Guzzle with Composer
+      run: |
+        # Install Guzzle via Composer
+        cd ./build/api
+        composer require guzzlehttp/guzzle
+
     - name: Deploy /build to Hostinger
       env:
         HOST: ${{ secrets.HOSTINGER_HOST }}

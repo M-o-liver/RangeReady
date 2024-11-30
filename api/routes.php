@@ -448,39 +448,15 @@ function insertActivityData($data) {
             return [$coord['x'], $coord['y']]; // Format [x, y] for the API request
         }, $data['coordinates']);
 
-        // TEST CURL
-            $url = 'https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped';
-
-            // Initialize cURL session
-            $ch = curl_init($url);
-
-            // Set cURL options
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 30);  // Set a timeout
-
-            // Execute the request and capture the response
-            $response = curl_exec($ch);
-
-            // Check for cURL errors
-            if (curl_errno($ch)) {
-                error_log(curl_error($ch));
-            } else {
-                error_log($response);
-            }
-
-            // Close cURL session
-            curl_close($ch);
-
-
-        // Now make the POST call to the specified API endpoint before Step 3
+        // Create a new Guzzle client
+        $client = new Client();
 
         $url = 'https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped';
         $headers = [
-            'Content-Type: application/json',
-            'Authorization: Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w'
+            'Authorization' => 'Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w',
+            'Content-Type' => 'application/json',
         ];
 
-        /*
         $body = json_encode([
             'parameters' => [
                 'event' => [
@@ -489,48 +465,15 @@ function insertActivityData($data) {
                 ]
             ]
         ]);
-        */
 
-        $body = json_encode([
-            'parameters' => [
-                'event' => [
-                    'coordinates' => [
-                        [557.5, 800],
-                        [580.5, 760],
-                        [567.5, 840],
-                        [515.5, 890],
-                        [549.5, 720]
-                    ],
-                    'num_clusters' => 1
-                ]
-            ]
+        // Send the request
+        $response = $client->post($url, [
+            'headers' => $headers,
+            'body' => $body,
+            'timeout' => 10
         ]);
 
-        // Initialize cURL session
-        $ch = curl_init();
-
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-
-        // Execute the POST request
-        $response = curl_exec($ch);
-
-        // Check for errors in the cURL request
-        if (curl_errno($ch)) {
-            throw new Exception('cURL error: ' . curl_error($ch));
-        }
-
-        // Close cURL session
-        curl_close($ch);
-
-        // Response
-        $responseData = json_decode($response, true);
+        $responseData = json_decode($response->getBody(), true);
 
         if (isset($responseData['executionResult']['success']['returnValue']['group_size'])) {
             $groupSize = $responseData['executionResult']['success']['returnValue']['group_size'];
