@@ -127,6 +127,7 @@
   
   .ongoing-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     margin-top: 10px;
@@ -177,10 +178,9 @@
     background-color: #9DAA77;
   }
   
-  /* Add fixed widths for better column control */
   .ongoing-table th:nth-child(1), /* SN */
   .ongoing-table td:nth-child(1) {
-    width: 15%;
+    width: 12%;
   }
   
   .ongoing-table th:nth-child(2), /* Name */
@@ -195,7 +195,7 @@
   
   .ongoing-table th:nth-child(4), /* Unit */
   .ongoing-table td:nth-child(4) {
-    width: 15%;
+    width: 18%;
   }
   
   .ongoing-table th:nth-child(5), /* Activity */
@@ -206,5 +206,33 @@
   .ongoing-table th:nth-child(6), /* Actions */
   .ongoing-table td:nth-child(6) {
     width: 15%;
+  }
+  
+  .ongoing-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Standardize input heights */
+  input,
+  select {
+    height: 38px;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+  
+  /* Specific styling for the unit selector */
+  select[value="unit"] {
+    height: 38px;
+    padding: 8px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+    padding-right: 30px;
   }
   
