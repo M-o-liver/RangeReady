@@ -71,8 +71,7 @@ if ($method == 'POST') {
         $response = getOnGoingActivity();
         echo json_encode($response);
     } elseif ($request == '/api/getOnGoingActivityType') {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $response = getOnGoingActivityType($data);
+        $response = getOnGoingActivityType($_GET['activityName']);
         echo json_encode($response);
     }
 }

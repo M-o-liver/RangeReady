@@ -66,8 +66,10 @@ function StartActivity() {
   // Fetch activity types when Add Data is clicked
   const handleAddData = (index) => {
     const activityData = ongoingActivities[index];
-    console.log("Adding data for", activityData);
-    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivityType", {
+    const activityName = activityData.ActivityName;
+    const url = `https://hackfd-rangeready.ca/api/getOnGoingActivityType?activityName=${encodeURIComponent(activityName)}`;
+  
+    fetch(url, {
       method: "GET",
       headers: {
         "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
