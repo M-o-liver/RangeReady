@@ -70,9 +70,10 @@ function App() {
               <h2>Range Ready</h2>
             </header>
             <div style={{
-              backgroundColor: '#f5f5f5',
+              backgroundColor: '#02230E',
               padding: '2rem',
-              minHeight: '100vh'
+              minHeight: '100vh',
+              color: '#FFFFFF'
             }}>
               <h1>Welcome, {username}!</h1>
               <Menu handleLogout={handleLogout} />  {}

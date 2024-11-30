@@ -28,15 +28,25 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
+    background-color: #04471C;
+    border: 2px solid #8B9862;
   }
   
   .activity-table th,
   .activity-table td,
   .ongoing-table th,
   .ongoing-table td {
-    border: 1px solid #ccc;
+    border: 1px solid #8B9862;
     padding: 10px;
     text-align: left;
+    color: white;
+  }
+  
+  .activity-table th,
+  .ongoing-table th {
+    background-color: #02230E;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   
   button {
@@ -51,5 +61,67 @@
   
   button:hover {
     background-color: #0056b3;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #04471C;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 2px solid #8B9862;
+    width: 90%;
+    max-width: 500px;
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-content h3 {
+    color: white;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  
+  .modal-content select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #8B9862;
+    border-radius: 4px;
+    color: #000000;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+  
+  .modal-buttons button {
+    background-color: #8B9862;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .modal-buttons button:hover {
+    background-color: #9DAA77;
   }
   

@@ -263,21 +263,25 @@ function StartActivity() {
 
       {/* Modal for Activity Type */}
       {showModal && (
-        <div className="modal">
-          <h3>Select Activity Type</h3>
-          <select
-            value={selectedActivityType}
-            onChange={handleActivityTypeChange}
-          >
-            <option value="">Select Activity Type</option>
-            {activityTypes.map((activityType, index) => (
-              <option key={index} value={activityType.ActivityType}>
-                {activityType.ActivityType}
-              </option>
-            ))}
-          </select>
-          <button onClick={handleNext}>Next</button>
-          <button onClick={() => setShowModal(false)}>Close</button>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Select Activity Type</h3>
+            <select
+              value={selectedActivityType}
+              onChange={handleActivityTypeChange}
+            >
+              <option value="">Select Activity Type</option>
+              {activityTypes.map((activityType, index) => (
+                <option key={index} value={activityType.ActivityType}>
+                  {activityType.ActivityType}
+                </option>
+              ))}
+            </select>
+            <div className="modal-buttons">
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button onClick={handleNext}>Next</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
