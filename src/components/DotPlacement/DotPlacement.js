@@ -5,7 +5,7 @@ function DotPlacement() {
   const { state } = useLocation(); // Get the state from the router
   const { sn, activityType, activityName } = state || {}; // Destructure sn and activityType from the state
   const [dots, setDots] = useState([]); // Store dot coordinates
-  const [selectedActivityType, setSelectedActivityType] = useState(activityType || ""); // Store selected activity type from state
+  const [selectedActivityType] = useState(activityType || ""); // Store selected activity type from state
   const imageUrl = "./img/Target.jpg";
 
   const navigate = useNavigate(); // Hook to navigate programmatically
