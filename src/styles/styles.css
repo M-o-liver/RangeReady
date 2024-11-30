@@ -25,10 +25,12 @@ body {
   width: 100%;
   max-width: 400px;
   padding: 2rem;
-  background-color: #04471C; /*Heavy Forest Green for Containers*/
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #04471C;
+  border: 2px solid #8B9862;
   border-radius: 8px;
   backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  text-align: center;
 }
 
 /* Form styling */
@@ -39,53 +41,51 @@ form {
 }
 
 label {
-  color: #ffffff;
+  color: #FFFFFF;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 600;
 }
 
 input {
   padding: 12px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #8B9862;
   border-radius: 4px;
-  color: #ffffff;
+  color: #000000;
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 input:focus {
   outline: none;
-  border-color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #D4D4D4;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 /* Button styling */
 button {
+  background-color: #8B9862;
+  color: #FFFFFF;
   padding: 12px 24px;
-  background-color: #ffffff;
-  color: #000000;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: #9DAA77;
   transform: translateY(-2px);
 }
 
 /* Error message styling */
 .error {
-  color: #ff4444;
+  color: #FF9999;
   font-size: 0.9rem;
-  text-align: center;
   margin-top: 1rem;
 }
   
@@ -218,16 +218,19 @@ button:hover {
   }
 
   .military-header h1 {
+    color: #FFFFFF;
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 4px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     margin-bottom: 0.5rem;
   }
 
   .military-subtitle {
-    font-size: 0.8rem;
+    color: #D4D4D4;
+    font-size: 0.9rem;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 2rem;
   }
 
   .form-group {
