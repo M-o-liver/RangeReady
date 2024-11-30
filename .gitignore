@@ -1,5 +1,5 @@
 # Node.js-related files
-/node_modules/
+*/node_modules/
 /.pnp
 .pnp.js
 *.log
