@@ -11,6 +11,7 @@ function StartActivity() {
   const [activityTypes, setActivityTypes] = useState([]); // Store activity types for dropdown
   const [selectedActivityType, setSelectedActivityType] = useState(""); // Store selected activity type
   const navigate = useNavigate();
+  const [selectedSN, setSelectedSN] = useState(null);
 
   // Fetch activity options
   useEffect(() => {
@@ -69,6 +70,10 @@ function StartActivity() {
   const handleAddData = (index) => {
     const activityData = ongoingActivities[index];
     const activityName = activityData.ActivityName;
+
+    const sn = activityData.SN;
+    setSelectedSN(sn);
+
     const url = `https://hackfd-rangeready.ca/api/getOnGoingActivityType?activityName=${encodeURIComponent(activityName)}`;
   
     fetch(url, {
@@ -96,9 +101,10 @@ function StartActivity() {
 
   const handleNext = () => {
     console.log("Next button clicked with activity type:", selectedActivityType);
+    console.log("Selected SN:", selectedSN);
     // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
+    navigate("/dot-placement", { state: { sn: selectedSN, activityType: selectedActivityType } });
     setShowModal(false); // Close the modal
-    navigate("/dot-placement");
   };
 
   const addRow = () => {

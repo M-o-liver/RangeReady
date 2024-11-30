@@ -59,6 +59,10 @@ if ($method == 'POST') {
         $data = json_decode(file_get_contents('php://input'), true);
         $response = registerActivity($data);
         echo json_encode($response);
+    } elseif ($requestPath == '/api/insertActivityData') {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $response = insertActivityData($data);
+        echo json_encode($response);
     }
 } elseif ($method == 'GET') {
     if ($requestPath == '/api/ping') {

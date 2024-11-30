@@ -413,3 +413,5 @@ function registerActivity($data) {
     }
 }
 
+function insertActivityData($data) {
+}
