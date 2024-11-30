@@ -242,19 +242,19 @@ function StartActivity() {
             </tr>
           </thead>
           <tbody>
-            {ongoingActivities.map((activity, index) => (
-              <tr key={index}>
-                <td>{activity.sn}</td>
-                <td>{activity.name}</td>
-                <td>{activity.email}</td>
-                <td>{activity.unit}</td>
-                <td>{activity.activityName}</td>
-                <td>
-                  <button onClick={() => handleAddData(index)}>Add Data</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          {ongoingActivities.map((activity, index) => (
+            <tr key={index}>
+              <td>{activity.SN}</td> {/* Ensure property names are correct */}
+              <td>{activity.NAME}</td>
+              <td>{activity.EMAIL}</td>
+              <td>{activity.UnitName}</td>
+              <td>{activity.ActivityName}</td>
+              <td>
+                <button onClick={() => handleAddData(index)}>Add Data</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
         </table>
       </div>
 
