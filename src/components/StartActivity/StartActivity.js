@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 
 function StartActivity() {
-  const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]); // Default row
+  const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]);
   const [activity, setActivity] = useState("");
-  const [activities, setActivities] = useState([]); // Store activity options
-  const [units, setUnits] = useState([]); // Store unit options
-  const [ongoingActivities, setOngoingActivities] = useState([]); // Store ongoing activities
+  const [activities, setActivities] = useState([]);
+  const [units, setUnits] = useState([]);
+  const [ongoingActivities, setOngoingActivities] = useState([]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [activityTypes, setActivityTypes] = useState([]); // Store activity types for dropdown
+  const [selectedActivityType, setSelectedActivityType] = useState(""); // Store selected activity type
 
-  // Fetch activity options when component mounts
+  // Fetch activity options
   useEffect(() => {
     fetch("https://hackfd-rangeready.ca/api/getActivitiesOptions", {
       method: "GET",
@@ -18,14 +21,14 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setActivities(data.data); // Populate activity options
+          setActivities(data.data);
         } else {
           console.error("Failed to fetch activities:", data.message);
         }
       })
       .catch((error) => console.error("Error fetching activity options:", error));
-    
-    // Fetch unit options when component mounts
+
+    // Fetch unit options
     fetch("https://hackfd-rangeready.ca/api/getUnitOptions", {
       method: "GET",
       headers: {
@@ -35,7 +38,7 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setUnits(data.data); // Populate unit options
+          setUnits(data.data);
         } else {
           console.error("Failed to fetch units:", data.message);
         }
@@ -52,7 +55,7 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setOngoingActivities(data.data); // Populate ongoing activities
+          setOngoingActivities(data.data);
         } else {
           console.error("Failed to fetch ongoing activities:", data.message);
         }
@@ -60,13 +63,45 @@ function StartActivity() {
       .catch((error) => console.error("Error fetching ongoing activities:", error));
   }, []);
 
+  // Fetch activity types when Add Data is clicked
+  const handleAddData = (index) => {
+    const activityData = ongoingActivities[index];
+    console.log("Adding data for", activityData); // Here, you can implement what should happen when the button is clicked
+    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivityType", {
+      method: "GET",
+      headers: {
+        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setActivityTypes(data.data); // Populate activity types dropdown
+          setShowModal(true); // Show the modal when activity types are fetched
+        } else {
+          console.error("Failed to fetch activity types:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error fetching activity types:", error));
+  };
+
+  const handleActivityTypeChange = (e) => {
+    setSelectedActivityType(e.target.value);
+  };
+
+  const handleNext = () => {
+    console.log("Next button clicked with activity type:", selectedActivityType);
+    // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
+    setShowModal(false); // Close the modal
+  };
+
   const addRow = () => {
     setRows([...rows, { sn: "", name: "", email: "", unit: "" }]);
   };
 
   const removeRow = (index) => {
     const newRows = [...rows];
-    newRows.splice(index, 1); // Remove the row at the given index
+    newRows.splice(index, 1);
     setRows(newRows);
   };
 
@@ -77,13 +112,11 @@ function StartActivity() {
   };
 
   const handleSubmit = () => {
-    // Basic validation to ensure activity and rows are filled
     if (!activity) {
       alert("Please select an activity.");
       return;
     }
 
-    // Ensure each row has valid values for sn, name, email, and unit
     for (let i = 0; i < rows.length; i++) {
       const { sn, name, email, unit } = rows[i];
       if (!sn || !name || !email || !unit) {
@@ -119,12 +152,6 @@ function StartActivity() {
       .catch((error) => alert("Error registering activity!"));
   };
 
-  const handleAddData = (index) => {
-    const activityData = ongoingActivities[index];
-    console.log("Adding data for", activityData); // Here, you can implement what should happen when the button is clicked
-    // For example, populate the current row with this data or trigger a form submission.
-  };
-
   return (
     <div className="start-activity">
       {/* Top Section */}
@@ -145,7 +172,7 @@ function StartActivity() {
               <th>Name</th>
               <th>Email</th>
               <th>Unit</th>
-              <th>Actions</th> {/* Added column for actions */}
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -190,7 +217,6 @@ function StartActivity() {
                   </select>
                 </td>
                 <td>
-                  {/* Remove button */}
                   <button onClick={() => removeRow(index)}>Remove</button>
                 </td>
               </tr>
@@ -218,11 +244,11 @@ function StartActivity() {
           <tbody>
             {ongoingActivities.map((activity, index) => (
               <tr key={index}>
-                <td>{activity.SN}</td>
-                <td>{activity.NAME}</td>
-                <td>{activity.EMAIL}</td>
-                <td>{activity.UnitName}</td>
-                <td>{activity.ActivityName}</td>
+                <td>{activity.sn}</td>
+                <td>{activity.name}</td>
+                <td>{activity.email}</td>
+                <td>{activity.unit}</td>
+                <td>{activity.activityName}</td>
                 <td>
                   <button onClick={() => handleAddData(index)}>Add Data</button>
                 </td>
@@ -231,6 +257,26 @@ function StartActivity() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal for Activity Type */}
+      {showModal && (
+        <div className="modal">
+          <h3>Select Activity Type</h3>
+          <select
+            value={selectedActivityType}
+            onChange={handleActivityTypeChange}
+          >
+            <option value="">Select Activity Type</option>
+            {activityTypes.map((activityType, index) => (
+              <option key={index} value={activityType.Name}>
+                {activityType.Name}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleNext}>Next</button>
+          <button onClick={() => setShowModal(false)}>Close</button>
+        </div>
+      )}
     </div>
   );
 }
