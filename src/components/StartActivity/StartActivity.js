@@ -3,14 +3,9 @@ import React, { useState, useEffect } from "react";
 function StartActivity() {
   const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]); // Default row
   const [activity, setActivity] = useState("");
-  const [activities, setActivities] = useState([]);
-  const [units, setUnits] = useState([]);
-  const [ongoingActivities, setOngoingActivities] = useState([]);
-  
-  // Popup-related state
-  const [showPopup, setShowPopup] = useState(false);
-  const [activityTypes, setActivityTypes] = useState([]);
-  const [selectedActivityType, setSelectedActivityType] = useState("");
+  const [activities, setActivities] = useState([]); // Store activity options
+  const [units, setUnits] = useState([]); // Store unit options
+  const [ongoingActivities, setOngoingActivities] = useState([]); // Store ongoing activities
 
   // Fetch activity options when component mounts
   useEffect(() => {
@@ -46,6 +41,23 @@ function StartActivity() {
         }
       })
       .catch((error) => console.error("Error fetching unit options:", error));
+
+    // Fetch ongoing activity data
+    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivity", {
+      method: "GET",
+      headers: {
+        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setOngoingActivities(data.data); // Populate ongoing activities
+        } else {
+          console.error("Failed to fetch ongoing activities:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error fetching ongoing activities:", error));
   }, []);
 
   const addRow = () => {
@@ -107,44 +119,10 @@ function StartActivity() {
       .catch((error) => alert("Error registering activity!"));
   };
 
-  // Fetch activity types for the selected ongoing activity
-  const fetchActivityTypes = (activityName) => {
-    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivityType", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
-      },
-      body: JSON.stringify({ activity: activityName }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setActivityTypes(data.data);
-          setShowPopup(true);
-        } else {
-          console.error("Failed to fetch activity types:", data.message);
-        }
-      })
-      .catch((error) => console.error("Error fetching activity types:", error));
-  };
-
-  // Handle the Add Data button click
-  const handleAddDataClick = (activityName) => {
-    fetchActivityTypes(activityName);
-  };
-
-  const handlePopupClose = () => {
-    setShowPopup(false);
-  };
-
-  const handleNext = () => {
-    if (selectedActivityType) {
-      alert("Selected Activity Type: " + selectedActivityType);
-      setShowPopup(false); // Close popup on Next button click
-    } else {
-      alert("Please select an activity type.");
-    }
+  const handleAddData = (index) => {
+    const activityData = ongoingActivities[index];
+    console.log("Adding data for", activityData); // Here, you can implement what should happen when the button is clicked
+    // For example, populate the current row with this data or trigger a form submission.
   };
 
   return (
@@ -233,7 +211,7 @@ function StartActivity() {
               <th>Name</th>
               <th>Email</th>
               <th>Unit</th>
-              <th>Activity</th>
+              <th>Activity Name</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -246,9 +224,7 @@ function StartActivity() {
                 <td>{activity.unit}</td>
                 <td>{activity.activity}</td>
                 <td>
-                  <button onClick={() => handleAddDataClick(activity.activity)}>
-                    Add Data
-                  </button>
+                  <button onClick={() => handleAddData(index)}>Add Data</button>
                 </td>
               </tr>
             ))}
