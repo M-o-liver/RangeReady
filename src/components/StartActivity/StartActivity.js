@@ -104,7 +104,7 @@ function StartActivity() {
   const handleNext = () => {
     console.log("Next button clicked with activity type:", selectedActivityType);
     console.log("Selected SN:", selectedSN);
-    console.log("Selected SN:", selectedActivityName);
+    console.log("Selected selectedActivityName:", selectedActivityName);
     // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
     navigate("/dot-placement", { state: { sn: selectedSN, activityName: selectedActivityName, activityType: selectedActivityType } });
     setShowModal(false); // Close the modal
