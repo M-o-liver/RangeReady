@@ -460,7 +460,7 @@ function insertActivityData($data) {
         $body = json_encode([
             'parameters' => [
                 'event' => [
-                    'coordinates' => $coordinatesForApi, // Use the formatted coordinates for the API
+                    'coordinates' => $coordinatesForApi,
                     'num_clusters' => 1
                 ]
             ]
@@ -491,8 +491,10 @@ function insertActivityData($data) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_VERBOSE, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
         // Execute the POST request
         $response = curl_exec($ch);
