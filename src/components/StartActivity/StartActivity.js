@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 function StartActivity() {
-  const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]);
+  const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]); // Default row
   const [activity, setActivity] = useState("");
-  const [activities, setActivities] = useState([]);
-  const [units, setUnits] = useState([]);
+  const [activities, setActivities] = useState([]); // Store activity options
+  const [units, setUnits] = useState([]); // Store unit options
   const [ongoingActivities, setOngoingActivities] = useState([]); // Store ongoing activities
 
-  // Fetch activity options and unit options when component mounts
+  // Fetch activity options when component mounts
   useEffect(() => {
     fetch("https://hackfd-rangeready.ca/api/getActivitiesOptions", {
       method: "GET",
@@ -18,13 +18,14 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setActivities(data.data);
+          setActivities(data.data); // Populate activity options
         } else {
           console.error("Failed to fetch activities:", data.message);
         }
       })
       .catch((error) => console.error("Error fetching activity options:", error));
-
+    
+    // Fetch unit options when component mounts
     fetch("https://hackfd-rangeready.ca/api/getUnitOptions", {
       method: "GET",
       headers: {
@@ -34,14 +35,14 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setUnits(data.data);
+          setUnits(data.data); // Populate unit options
         } else {
           console.error("Failed to fetch units:", data.message);
         }
       })
       .catch((error) => console.error("Error fetching unit options:", error));
 
-    // Fetch ongoing activities
+    // Fetch ongoing activity data
     fetch("https://hackfd-rangeready.ca/api/getOnGoingActivity", {
       method: "GET",
       headers: {
@@ -51,7 +52,7 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setOngoingActivities(data.data); // Store ongoing activities
+          setOngoingActivities(data.data); // Populate ongoing activities
         } else {
           console.error("Failed to fetch ongoing activities:", data.message);
         }
@@ -65,7 +66,7 @@ function StartActivity() {
 
   const removeRow = (index) => {
     const newRows = [...rows];
-    newRows.splice(index, 1);
+    newRows.splice(index, 1); // Remove the row at the given index
     setRows(newRows);
   };
 
@@ -76,11 +77,13 @@ function StartActivity() {
   };
 
   const handleSubmit = () => {
+    // Basic validation to ensure activity and rows are filled
     if (!activity) {
       alert("Please select an activity.");
       return;
     }
 
+    // Ensure each row has valid values for sn, name, email, and unit
     for (let i = 0; i < rows.length; i++) {
       const { sn, name, email, unit } = rows[i];
       if (!sn || !name || !email || !unit) {
@@ -91,7 +94,7 @@ function StartActivity() {
 
     const data = {
       activity,
-      rows: rows.map((row) => ({
+      rows: rows.map(row => ({
         ...row,
         unit: row.unit.split(" ")[0],
       })),
@@ -116,6 +119,12 @@ function StartActivity() {
       .catch((error) => alert("Error registering activity!"));
   };
 
+  const handleAddData = (index) => {
+    const activityData = ongoingActivities[index];
+    console.log("Adding data for", activityData); // Here, you can implement what should happen when the button is clicked
+    // For example, populate the current row with this data or trigger a form submission.
+  };
+
   return (
     <div className="start-activity">
       {/* Top Section */}
@@ -136,7 +145,7 @@ function StartActivity() {
               <th>Name</th>
               <th>Email</th>
               <th>Unit</th>
-              <th>Actions</th>
+              <th>Actions</th> {/* Added column for actions */}
             </tr>
           </thead>
           <tbody>
@@ -153,14 +162,18 @@ function StartActivity() {
                   <input
                     type="text"
                     value={row.name}
-                    onChange={(e) => handleChange(index, "name", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "name", e.target.value)
+                    }
                   />
                 </td>
                 <td>
                   <input
                     type="email"
                     value={row.email}
-                    onChange={(e) => handleChange(index, "email", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "email", e.target.value)
+                    }
                   />
                 </td>
                 <td>
@@ -177,6 +190,7 @@ function StartActivity() {
                   </select>
                 </td>
                 <td>
+                  {/* Remove button */}
                   <button onClick={() => removeRow(index)}>Remove</button>
                 </td>
               </tr>
@@ -197,7 +211,7 @@ function StartActivity() {
               <th>Name</th>
               <th>Email</th>
               <th>Unit</th>
-              <th>Activity</th>
+              <th>Activity Name</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -210,9 +224,7 @@ function StartActivity() {
                 <td>{activity.UnitName}</td>
                 <td>{activity.ActivityName}</td>
                 <td>
-                  <button onClick={() => console.log("Add Data button clicked", activity)}>
-                    Add Data
-                  </button>
+                  <button onClick={() => handleAddData(index)}>Add Data</button>
                 </td>
               </tr>
             ))}
