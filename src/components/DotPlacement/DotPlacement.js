@@ -23,11 +23,6 @@ function DotPlacement() {
     setDots(dots.slice(0, -1)); // Remove the last dot
   };
 
-  // Handle Activity Type change from the dropdown
-  const handleActivityTypeChange = (e) => {
-    setSelectedActivityType(e.target.value);
-  };
-
   // Submit the data to the API
   const handleSubmit = () => {
     // Prepare the data to be sent in the POST request
