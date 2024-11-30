@@ -238,6 +238,9 @@ function getOnGoingActivityType($data) {
         ];
     }
 
+    // Initialize results to an empty array to avoid undefined variable warnings
+    $results = [];
+
     try {
         // Prepare the query to fetch activity types based on the provided activity name
         $stmt = $pdo->prepare("
