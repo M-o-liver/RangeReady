@@ -414,9 +414,66 @@ function registerActivity($data) {
 }
 
 function insertActivityData($data) {
-    error_log(print_r($data, true));
-    return [
-        'success' => false,
-        'message' => 'An error occurred while registering the activity. Please try again later.'
-    ];
+    global $pdo;
+
+    try {
+        // Step 1: Retrieve RefActDet by matching ActivityType and ActivityName
+        // Get RefActivity ID from Activities table by ActivityName
+        $query = "SELECT id FROM Activities WHERE Name = :activityName";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(['activityName' => $data['activityName']]);
+        $activity = $stmt->fetch();
+
+        if (!$activity) {
+            throw new Exception("Activity not found.");
+        }
+
+        $refActivityId = $activity['id'];
+
+        // Get RefActDetId from ActivityDetails table by ActivityType
+        $query = "SELECT id FROM ActivityDetails WHERE ActivityType = :activityType AND RefActivity = :refActivityId";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([
+            'activityType' => $data['activityType'],
+            'refActivityId' => $refActivityId
+        ]);
+        $activityDetails = $stmt->fetch();
+
+        if (!$activityDetails) {
+            throw new Exception("Activity details not found.");
+        }
+
+        $refActDetId = $activityDetails['id'];
+
+        $coordinates = json_encode($data['coordinates']); // Stored as a JSON string
+
+        // Step 3: Insert into ActivityEvent table
+        $query = "INSERT INTO ActivityEvent (RefActDet, SN, createdAt, Coordinates) VALUES (:refActDetId, :sn, NOW(), :coordinates)";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([
+            'refActDetId' => $refActDetId,
+            'sn' => $data['sn'],
+            'coordinates' => $coordinates
+        ]);
+
+        // Set HTTP status code for success (200 OK)
+        http_response_code(200);
+
+        // Return success message
+        return [
+            'success' => true,
+            'message' => 'Activity data registered successfully.'
+        ];
+    } catch (Exception $e) {
+        // Handle any errors
+        error_log($e->getMessage());
+
+        // Set HTTP status code for error (500 Internal Server Error)
+        http_response_code(500);
+
+        return [
+            'success' => false,
+            'message' => 'An error occurred while registering the activity. Please try again later.'
+        ];
+    }
 }
