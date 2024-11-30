@@ -79,6 +79,7 @@ function StartActivity() {
       .then((data) => {
         if (data.success) {
           setActivityTypes(data.data);
+          console.log("Fetched Activity Types:", data.data);
           setShowModal(true);
         } else {
           console.error("Failed to fetch activity types:", data.message);
