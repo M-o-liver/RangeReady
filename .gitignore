@@ -1,0 +1,55 @@
+# Node.js-related files
+/node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+/build/
+dist/
+
+# React environment files
+.env
+.env.local
+.env.*.local
+
+# Cache and debug
+.cache/
+coverage/
+*.lock
+
+# Editor and system files
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+
+# PHP-related files
+/vendor/
+composer.lock
+
+# Local PHP server configuration
+*.local
+*.env
+
+# Ignoring database files (for MariaDB, if any local files)
+*.sql
+*.sql.gz
+db_backup/
+
+# Ignoring runtime PHP files
+*.log
+*.cache
+*.session
+php_error.log
+
+# Ignoring public folder for PHP (if dynamically generated content exists)
+public/uploads/
+public/tmp/
+
+# Ignore API-generated files (optional, if temporary storage exists)
+api/temp/
