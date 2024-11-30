@@ -475,6 +475,7 @@ function insertActivityData($data) {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
 
         // Execute the POST request
         $response = curl_exec($ch);
