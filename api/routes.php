@@ -221,22 +221,6 @@ function getOnGoingActivityType($data) {
             'message' => 'Activity name is required'
         ];
     }
-}
-
-function getOnGoingActivityType($data) {
-    global $pdo;
-
-    // Ensure we get the 'activityName' from the request data
-    $activityName = isset($data['activityName']) ? $data['activityName'] : null;
-
-    // Check if the activity name is provided
-    if (!$activityName) {
-        http_response_code(400);  // Bad Request
-        return [
-            'success' => false,
-            'message' => 'Activity name is required'
-        ];
-    }
 
     // Initialize results to an empty array to avoid undefined variable warnings
     $results = [];
