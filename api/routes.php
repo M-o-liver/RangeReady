@@ -207,6 +207,53 @@ function getUnitOptions() {
     }
 }
 
+function getOnGoingActivity() {
+    global $pdo;
+
+    try {
+        // Use query method to fetch all results
+        $stmt = $pdo->query("SELECT u.SN, u.NAME, u.EMAIL, ut.Name AS UnitName, a.Name AS ActivityName FROM ActivityRegister ar JOIN User u ON ar.SN = u.SN JOIN UnitTable ut ON u.UnitTableID = ut.id JOIN Activities a ON ar.Activity = a.id WHERE DATE(ar.DatetimeStamp) = CURDATE()");
+
+        // Check if the query was successful
+        if ($stmt) {
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Check if results are found
+            if ($results) {
+                http_response_code(200);  // OK
+                return [
+                    'success' => true,
+                    'data' => $results
+                ];
+            } else {
+                http_response_code(404);  // Not Found
+                return [
+                    'success' => false,
+                    'message' => 'No On Going Activity found'
+                ];
+            }
+        } else {
+            // In case the query failed
+            http_response_code(500);  // Internal Server Error
+            return [
+                'success' => false,
+                'message' => 'Failed to execute the query'
+            ];
+        }
+    } catch (Exception $e) {
+        // Log the error details for debugging
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Handle general exceptions
+        http_response_code(500);  // Internal Server Error
+        return [
+            'success' => false,
+            'message' => 'An error occurred. Please try again later.'
+        ];
+    }
+}
+
 function getOnGoingActivityType($data) {
     global $pdo;
 
