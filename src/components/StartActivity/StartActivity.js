@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 
 function StartActivity() {
   const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]); // Default row
   const [activity, setActivity] = useState("");
   const [activities, setActivities] = useState([]); // Store activity options
   const [units, setUnits] = useState([]); // Store unit options
+  const [ongoingActivities, setOngoingActivities] = useState([]); // Store ongoing activities
 
-  // Fetch activity options when component mounts
+  // Fetch activity options and ongoing activities when component mounts
   useEffect(() => {
+    // Fetch activities
     fetch("https://hackfd-rangeready.ca/api/getActivitiesOptions", {
       method: "GET",
       headers: {
@@ -23,8 +25,8 @@ function StartActivity() {
         }
       })
       .catch((error) => console.error("Error fetching activity options:", error));
-    
-    // Fetch unit options when component mounts
+
+    // Fetch unit options
     fetch("https://hackfd-rangeready.ca/api/getUnitOptions", {
       method: "GET",
       headers: {
@@ -40,6 +42,23 @@ function StartActivity() {
         }
       })
       .catch((error) => console.error("Error fetching unit options:", error));
+
+    // Fetch ongoing activities
+    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivity", {
+      method: "GET",
+      headers: {
+        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setOngoingActivities(data.data); // Populate ongoing activities
+        } else {
+          console.error("Failed to fetch ongoing activities:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error fetching ongoing activities:", error));
   }, []);
 
   const addRow = () => {
@@ -99,6 +118,11 @@ function StartActivity() {
         }
       })
       .catch((error) => alert("Error registering activity!"));
+  };
+
+  const handleAddData = (index) => {
+    // Logic to add data for the specific row
+    alert(`Adding data for row ${index + 1}`);
   };
 
   return (
@@ -180,7 +204,32 @@ function StartActivity() {
       {/* Bottom Section */}
       <div className="ongoing-activity">
         <h2>Ongoing Activity</h2>
-        {/* Fetch and display ongoing activity here */}
+        <table>
+          <thead>
+            <tr>
+              <th>SN</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Unit</th>
+              <th>Activity Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ongoingActivities.map((activity, index) => (
+              <tr key={index}>
+                <td>{activity.SN}</td>
+                <td>{activity.NAME}</td>
+                <td>{activity.EMAIL}</td>
+                <td>{activity.UnitName}</td>
+                <td>{activity.ActivityName}</td>
+                <td>
+                  <button onClick={() => handleAddData(index)}>Add Data</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
