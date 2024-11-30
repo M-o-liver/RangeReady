@@ -34,5 +34,5 @@ jobs:
         chmod 600 private_key
 
         # Deploy build contents
-        rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" \
-          --delete build/ $USERNAME@$HOST:public_html/
+        rsync -avz -e "ssh -p 65002 -i private_key -o StrictHostKeyChecking=no" \
+          --delete build/ $USERNAME@$HOST:domains/hackfd-rangeready.ca/public_html/
