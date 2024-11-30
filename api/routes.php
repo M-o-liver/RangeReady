@@ -448,6 +448,30 @@ function insertActivityData($data) {
             return [$coord['x'], $coord['y']]; // Format [x, y] for the API request
         }, $data['coordinates']);
 
+        // TEST CURL
+            $url = 'https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped';
+
+            // Initialize cURL session
+            $ch = curl_init($url);
+
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);  // Set a timeout
+
+            // Execute the request and capture the response
+            $response = curl_exec($ch);
+
+            // Check for cURL errors
+            if (curl_errno($ch)) {
+                error_log(curl_error($ch));
+            } else {
+                error_log($response);
+            }
+
+            // Close cURL session
+            curl_close($ch);
+
+
         // Now make the POST call to the specified API endpoint before Step 3
 
         $url = 'https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped';
@@ -491,10 +515,8 @@ function insertActivityData($data) {
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_VERBOSE, true);
 
         // Execute the POST request
         $response = curl_exec($ch);
