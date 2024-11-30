@@ -71,7 +71,18 @@ if ($method == 'POST') {
         $response = getOnGoingActivity();
         echo json_encode($response);
     } elseif ($request == '/api/getOnGoingActivityType') {
-        $response = getOnGoingActivityType($_GET['activityName']);
-        echo json_encode($response);
+        // Ensure activityName is set
+        if (isset($_GET['activityName'])) {
+            // Pass activityName as part of an associative array
+            $data = ['activityName' => $_GET['activityName']];
+            $response = getOnGoingActivityType($data);
+            echo json_encode($response);
+        } else {
+            // Return an error if activityName is not provided
+            echo json_encode([
+                'success' => false,
+                'message' => 'Activity name is required'
+            ]);
+        }
     }
 }
