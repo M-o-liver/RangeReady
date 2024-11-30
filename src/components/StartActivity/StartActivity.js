@@ -160,8 +160,10 @@ function StartActivity() {
       .then((data) => {
         if (data.success) {
           alert("Activity Registered Successfully!");
+          navigate("/start-activity");
         } else {
           alert("Error registering activity: " + data.message);
+          navigate("/start-activity");
         }
       })
       .catch((error) => alert("Error registering activity!"));

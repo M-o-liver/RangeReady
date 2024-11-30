@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom"; // Import useLocation to access passed state
+import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
 
 function DotPlacement() {
   const { state } = useLocation(); // Get the state from the router
@@ -7,6 +7,8 @@ function DotPlacement() {
   const [dots, setDots] = useState([]); // Store dot coordinates
   const [selectedActivityType, setSelectedActivityType] = useState(activityType || ""); // Store selected activity type from state
   const imageUrl = "./img/Target.jpg";
+
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
   // Handle dot placement on click
   const handleImageClick = (e) => {
@@ -60,22 +62,14 @@ function DotPlacement() {
       });
   };
 
+  // Close the activity page and return to the previous page
+  const handleClose = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
   return (
     <div className="dot-placement">
-      <h2>Click on the image to place dots</h2>
-
-      {/* Activity Type Dropdown */}
-      <select
-        value={selectedActivityType}
-        onChange={handleActivityTypeChange}
-        style={{ marginBottom: "10px", padding: "5px" }}
-      >
-        <option value="">Select Activity Type</option>
-        <option value="ActivityType1">Activity Type 1</option>
-        <option value="ActivityType2">Activity Type 2</option>
-        <option value="ActivityType3">Activity Type 3</option>
-        {/* Add more activity types as needed */}
-      </select>
+      <h2>Click on the image to place dots</h2>>
 
       {/* Image and Dot Placement */}
       <div className="image-container" style={{ position: "relative" }}>
@@ -105,6 +99,7 @@ function DotPlacement() {
       <div className="dot-actions" style={{ marginTop: "10px" }}>
         <button onClick={handleUndo}>Undo</button>
         <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleClose}>Close</button> {/* Close Button */}
       </div>
     </div>
   );
