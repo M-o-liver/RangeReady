@@ -5,7 +5,6 @@ function StartActivity() {
   const [activity, setActivity] = useState("");
   const [activities, setActivities] = useState([]); // Store activity options
   const [units, setUnits] = useState([]); // Store unit options
-  const [ongoingActivities, setOngoingActivities] = useState([]); // Store ongoing activities
 
   // Fetch activity options when component mounts
   useEffect(() => {
@@ -41,23 +40,6 @@ function StartActivity() {
         }
       })
       .catch((error) => console.error("Error fetching unit options:", error));
-
-    // Fetch ongoing activity data
-    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivity", {
-      method: "GET",
-      headers: {
-        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setOngoingActivities(data.data); // Populate ongoing activities
-        } else {
-          console.error("Failed to fetch ongoing activities:", data.message);
-        }
-      })
-      .catch((error) => console.error("Error fetching ongoing activities:", error));
   }, []);
 
   const addRow = () => {
@@ -117,12 +99,6 @@ function StartActivity() {
         }
       })
       .catch((error) => alert("Error registering activity!"));
-  };
-
-  const handleAddData = (index) => {
-    const activityData = ongoingActivities[index];
-    console.log("Adding data for", activityData); // Here, you can implement what should happen when the button is clicked
-    // For example, populate the current row with this data or trigger a form submission.
   };
 
   return (
@@ -204,32 +180,7 @@ function StartActivity() {
       {/* Bottom Section */}
       <div className="ongoing-activity">
         <h2>Ongoing Activity</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>SN</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Unit</th>
-              <th>Activity Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ongoingActivities.map((activity, index) => (
-              <tr key={index}>
-                <td>{activity.SN}</td>
-                <td>{activity.NAME}</td>
-                <td>{activity.EMAIL}</td>
-                <td>{activity.UnitName}</td>
-                <td>{activity.ActivityName}</td>
-                <td>
-                  <button onClick={() => handleAddData(index)}>Add Data</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* Fetch and display ongoing activity here */}
       </div>
     </div>
   );
