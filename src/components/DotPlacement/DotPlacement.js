@@ -31,7 +31,7 @@ function DotPlacement() {
           src={imageUrl}
           alt="Interactive"
           onClick={handleImageClick}
-          style={{ width: "100%", height: "auto", cursor: "pointer" }}
+          style={{ width: "50%", height: "auto", cursor: "pointer" }}
         />
         {dots.map((dot, index) => (
           <div
