@@ -233,31 +233,31 @@ function StartActivity() {
       {/* Bottom Section */}
       <div className="ongoing-activity">
         <h2>Ongoing Activity</h2>
-        <table>
+        <table className="ongoing-table">
           <thead>
             <tr>
               <th>SN</th>
               <th>Name</th>
               <th>Email</th>
               <th>Unit</th>
-              <th>Activity Name</th>
+              <th>Activity</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-          {ongoingActivities.map((activity, index) => (
-            <tr key={index}>
-              <td>{activity.SN}</td>
-              <td>{activity.NAME}</td>
-              <td>{activity.EMAIL}</td>
-              <td>{activity.UnitName}</td>
-              <td>{activity.ActivityName}</td>
-              <td>
-                <button onClick={() => handleAddData(index)}>Add Data</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+            {ongoingActivities.map((activity, index) => (
+              <tr key={index}>
+                <td>{activity.SN}</td>
+                <td>{activity.NAME}</td>
+                <td title={activity.EMAIL}>{activity.EMAIL.substring(0, 5)}...</td>
+                <td>{activity.UnitName}</td>
+                <td>{activity.ActivityName}</td>
+                <td>
+                  <button onClick={() => handleAddData(index)}>Add Data</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
