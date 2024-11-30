@@ -221,15 +221,31 @@ function getOnGoingActivityType($data) {
             'message' => 'Activity name is required'
         ];
     }
+}
+
+function getOnGoingActivityType($data) {
+    global $pdo;
+
+    // Ensure we get the 'activityName' from the request data
+    $activityName = isset($data['activityName']) ? $data['activityName'] : null;
+
+    // Check if the activity name is provided
+    if (!$activityName) {
+        http_response_code(400);  // Bad Request
+        return [
+            'success' => false,
+            'message' => 'Activity name is required'
+        ];
+    }
 
     try {
         // Prepare the query to fetch activity types based on the provided activity name
         $stmt = $pdo->prepare("
-            SELECT ActivityType 
-            FROM ActivityDetails 
+            SELECT ActivityType
+            FROM ActivityDetails
             WHERE RefActivity = (
-                SELECT id 
-                FROM Activities 
+                SELECT id
+                FROM Activities
                 WHERE Name = ?
             )
         ");

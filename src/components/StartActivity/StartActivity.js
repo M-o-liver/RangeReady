@@ -3,8 +3,14 @@ import React, { useState, useEffect } from "react";
 function StartActivity() {
   const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]); // Default row
   const [activity, setActivity] = useState("");
-  const [activities, setActivities] = useState([]); // Store activity options
-  const [units, setUnits] = useState([]); // Store unit options
+  const [activities, setActivities] = useState([]);
+  const [units, setUnits] = useState([]);
+  const [ongoingActivities, setOngoingActivities] = useState([]);
+  
+  // Popup-related state
+  const [showPopup, setShowPopup] = useState(false);
+  const [activityTypes, setActivityTypes] = useState([]);
+  const [selectedActivityType, setSelectedActivityType] = useState("");
 
   // Fetch activity options when component mounts
   useEffect(() => {
@@ -101,6 +107,46 @@ function StartActivity() {
       .catch((error) => alert("Error registering activity!"));
   };
 
+  // Fetch activity types for the selected ongoing activity
+  const fetchActivityTypes = (activityName) => {
+    fetch("https://hackfd-rangeready.ca/api/getOnGoingActivityType", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
+      },
+      body: JSON.stringify({ activity: activityName }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setActivityTypes(data.data);
+          setShowPopup(true);
+        } else {
+          console.error("Failed to fetch activity types:", data.message);
+        }
+      })
+      .catch((error) => console.error("Error fetching activity types:", error));
+  };
+
+  // Handle the Add Data button click
+  const handleAddDataClick = (activityName) => {
+    fetchActivityTypes(activityName);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
+
+  const handleNext = () => {
+    if (selectedActivityType) {
+      alert("Selected Activity Type: " + selectedActivityType);
+      setShowPopup(false); // Close popup on Next button click
+    } else {
+      alert("Please select an activity type.");
+    }
+  };
+
   return (
     <div className="start-activity">
       {/* Top Section */}
@@ -180,8 +226,52 @@ function StartActivity() {
       {/* Bottom Section */}
       <div className="ongoing-activity">
         <h2>Ongoing Activity</h2>
-        {/* Fetch and display ongoing activity here */}
+        <table>
+          <thead>
+            <tr>
+              <th>SN</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Unit</th>
+              <th>Activity</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ongoingActivities.map((activity, index) => (
+              <tr key={index}>
+                <td>{activity.sn}</td>
+                <td>{activity.name}</td>
+                <td>{activity.email}</td>
+                <td>{activity.unit}</td>
+                <td>{activity.activity}</td>
+                <td>
+                  <button onClick={() => handleAddDataClick(activity.activity)}>
+                    Add Data
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+
+      {/* Popup for selecting Activity Type */}
+      {showPopup && (
+        <div className="popup">
+          <h3>Select Activity Type</h3>
+          <select onChange={(e) => setSelectedActivityType(e.target.value)} value={selectedActivityType}>
+            <option value="">Select Activity Type</option>
+            {activityTypes.map((activityType, index) => (
+              <option key={index} value={activityType.Name}>
+                {activityType.Name}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleNext}>Next</button>
+          <button onClick={handlePopupClose}>Close</button>
+        </div>
+      )}
     </div>
   );
 }
