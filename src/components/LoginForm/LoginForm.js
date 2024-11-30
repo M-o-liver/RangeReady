@@ -2,32 +2,33 @@ import React from "react";
 
 function LoginForm({ username, password, setUsername, setPassword, message, handleLogin }) {
   return (
-    <div>
-      <h1>Login</h1>
+    <div className="container">
+      <div className="military-header">
+        <h1>RANGE READY</h1>
+        <div className="military-subtitle">CANADIAN ARMED FORCES</div>
+      </div>
       <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            Username:
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </label>
+        <div className="form-group">
+          <label htmlFor="username">SERVICE NUMBER</label>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
         </div>
-        <div>
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </label>
+        <div className="form-group">
+          <label htmlFor="password">PASSWORD</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">LOGIN</button>
       </form>
       {message && <p className="error">{message}</p>}
     </div>

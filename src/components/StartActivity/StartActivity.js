@@ -218,11 +218,11 @@ function StartActivity() {
           <tbody>
             {ongoingActivities.map((activity, index) => (
               <tr key={index}>
-                <td>{activity.SN}</td>
-                <td>{activity.NAME}</td>
-                <td>{activity.EMAIL}</td>
-                <td>{activity.UnitName}</td>
-                <td>{activity.ActivityName}</td>
+                <td>{activity.sn}</td>
+                <td>{activity.name}</td>
+                <td>{activity.email}</td>
+                <td>{activity.unit}</td>
+                <td>{activity.activity}</td>
                 <td>
                   <button onClick={() => handleAddData(index)}>Add Data</button>
                 </td>
@@ -231,6 +231,23 @@ function StartActivity() {
           </tbody>
         </table>
       </div>
+
+      {/* Popup for selecting Activity Type */}
+      {showPopup && (
+        <div className="popup">
+          <h3>Select Activity Type</h3>
+          <select onChange={(e) => setSelectedActivityType(e.target.value)} value={selectedActivityType}>
+            <option value="">Select Activity Type</option>
+            {activityTypes.map((activityType, index) => (
+              <option key={index} value={activityType.Name}>
+                {activityType.Name}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleNext}>Next</button>
+          <button onClick={handlePopupClose}>Close</button>
+        </div>
+      )}
     </div>
   );
 }
