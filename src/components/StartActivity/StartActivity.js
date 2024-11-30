@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function StartActivity() {
   const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]);
@@ -9,6 +10,7 @@ function StartActivity() {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [activityTypes, setActivityTypes] = useState([]); // Store activity types for dropdown
   const [selectedActivityType, setSelectedActivityType] = useState(""); // Store selected activity type
+  const navigate = useNavigate();
 
   // Fetch activity options
   useEffect(() => {
@@ -96,6 +98,7 @@ function StartActivity() {
     console.log("Next button clicked with activity type:", selectedActivityType);
     // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
     setShowModal(false); // Close the modal
+    navigate("/dot-placement");
   };
 
   const addRow = () => {
