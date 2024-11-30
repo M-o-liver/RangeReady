@@ -1,4 +1,6 @@
 <?php
+use GuzzleHttp\Client;
+
 // routes.php
 
 /*
