@@ -28,7 +28,7 @@ jobs:
       run: |
         mv ./api ./build/api
 
-    - name: Set p PHP and Composer
+    - name: Set up PHP and Composer
       run: |
         # Install PHP
         sudo apt-get update

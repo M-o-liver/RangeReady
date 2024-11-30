@@ -1,23 +1,83 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from "react";
 
 function App() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("https://hackfd-rangeready.ca/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=`, // Horrific, but it's hackaton :P
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        setIsLoggedIn(true);
+      } else {
+        const errorData = await response.json();
+        setMessage("Login failed: " + (errorData.message || "Invalid credentials"));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Login failed: " + error.message);
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    setPassword("");
+    setMessage("");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: "2rem", textAlign: "center" }}>
+      {!isLoggedIn ? (
+        <div>
+          <h1>Login</h1>
+          <form onSubmit={handleLogin}>
+            <div>
+              <label>
+                Username:
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Password:
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
+            <button type="submit">Login</button>
+          </form>
+          {message && <p style={{ color: "red" }}>{message}</p>}
+        </div>
+      ) : (
+        <div>
+          <h1>Welcome, {username}!</h1>
+          <p>You have successfully logged in.</p>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
     </div>
   );
 }
