@@ -27,6 +27,7 @@ jobs:
     - name: Move backend code under /build
       run: |
         mv ./api ./build/api
+        mv ./img ./build/img
 
     - name: Set up PHP and Composer
       run: |
