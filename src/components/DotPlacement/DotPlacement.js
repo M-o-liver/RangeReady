@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 function DotPlacement() {
   const [dots, setDots] = useState([]); // Store dot coordinates
-  const imageUrl = "/img/Target.png";
+  const imageUrl = "/assets/Target.png";
 
   // Handle dot placement on click
   const handleImageClick = (e) => {
