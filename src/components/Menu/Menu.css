@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
 }
-
+/* Replaced to see if it was why Graph button was weirdly low. Replaced with .menu-select
 .dropdown select {
   background-color: #02230E;
   color: white;
@@ -78,7 +78,7 @@
   line-height: normal;
   vertical-align: middle;
 }
-
+*/
 .menu-list button:focus,
 .menu-list select:focus {
   outline: none;
@@ -93,4 +93,31 @@
 
 .menu-list li:last-child button:hover {
   background-color: #8B0000;
+}
+
+.menu-select {
+  padding: 0.8rem 1.5rem;
+  border: 1px solid #8B9862;
+  border-radius: 4px;
+  background-color: #02230E;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Roboto Mono', monospace;
+  transition: all 0.3s ease;
+  height: 42px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 20px;
+  padding-right: 40px;
+  min-width: 120px;
+}
+
+.menu-select:hover {
+  background-color: #8B9862;
+  transform: translateY(-2px);
 }

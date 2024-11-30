@@ -17,12 +17,10 @@ function Menu({ handleLogout }) {  // Receive handleLogout as prop
           <button onClick={() => navigate("/")}>View Activity</button>
         </li>
         <li>
-          <div className="dropdown">
-            <select onChange={(e) => alert(`Selected: ${e.target.value}`)}>
-              <option value="graph">Graph</option>
-              <option value="stats">Stats</option>
-            </select>
-          </div>
+          <select onChange={(e) => alert(`Selected: ${e.target.value}`)} className="menu-select">
+            <option value="graph">Graph</option>
+            <option value="stats">Stats</option>
+          </select>
         </li>
         <li>
           <button onClick={handleLogout}>Logout</button>  {}
