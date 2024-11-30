@@ -59,20 +59,20 @@ if ($method == 'POST') {
     }
 } elseif ($method == 'GET') {
     if ($request == '/api/ping') {
-        $results = getPong();
-        echo json_encode($results);
+        $response = getPong();
+        echo json_encode($response);
     } elseif ($request == '/api/getActivitiesOptions') {
-        $results = getActivitiesOption();
-        echo json_encode($results);
+        $response = getActivitiesOption();
+        echo json_encode($response);
     } elseif ($request == '/api/getUnitOptions') {
-        $results = getUnitOptions();
-        echo json_encode($results);
+        $response = getUnitOptions();
+        echo json_encode($response);
     } elseif ($request == '/api/getOnGoingActivity') {
-        $results = getOnGoingActivity();
-        echo json_encode($results);
+        $response = getOnGoingActivity();
+        echo json_encode($response);
     } elseif ($request == '/api/getOnGoingActivityType') {
         $data = json_decode(file_get_contents('php://input'), true);
         $response = getOnGoingActivityType($data);
-        echo json_encode($results);
+        echo json_encode($response);
     }
 }
