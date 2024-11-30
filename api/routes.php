@@ -257,11 +257,8 @@ function getOnGoingActivity() {
 function getOnGoingActivityType($data) {
     global $pdo;
 
-    // Ensure we get the 'activityName' from the request data
-    $activityName = isset($data['activityName']) ? $data['activityName'] : null;
-
-    // Check if the activity name is provided
-    if (!$activityName) {
+    // Validate input data
+    if (empty($data['activityName'])) {
         http_response_code(400);  // Bad Request
         return [
             'success' => false,
@@ -269,8 +266,7 @@ function getOnGoingActivityType($data) {
         ];
     }
 
-    // Initialize results to an empty array to avoid undefined variable warnings
-    $results = [];
+    $activityName = $data['activityName'];
 
     try {
         // Prepare the query to fetch activity types based on the provided activity name
@@ -280,12 +276,15 @@ function getOnGoingActivityType($data) {
             WHERE RefActivity = (
                 SELECT id
                 FROM Activities
-                WHERE Name = ?
+                WHERE Name = :activity_name
             )
         ");
 
-        // Execute the query, binding the activityName to the ? placeholder
-        $stmt->execute([$activityName]);
+        // Bind the activity name to the placeholder
+        $stmt->bindParam(':activity_name', $activityName, PDO::PARAM_STR);
+
+        // Execute the query
+        $stmt->execute();
 
         // Fetch the results
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -318,6 +317,7 @@ function getOnGoingActivityType($data) {
         ];
     }
 }
+
 
 function registerActivity($data) {
     global $pdo;

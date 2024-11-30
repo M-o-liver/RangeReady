@@ -66,7 +66,7 @@ function StartActivity() {
   // Fetch activity types when Add Data is clicked
   const handleAddData = (index) => {
     const activityData = ongoingActivities[index];
-    console.log("Adding data for", activityData); // Here, you can implement what should happen when the button is clicked
+    console.log("Adding data for", activityData);
     fetch("https://hackfd-rangeready.ca/api/getOnGoingActivityType", {
       method: "GET",
       headers: {
@@ -76,8 +76,8 @@ function StartActivity() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setActivityTypes(data.data); // Populate activity types dropdown
-          setShowModal(true); // Show the modal when activity types are fetched
+          setActivityTypes(data.data);
+          setShowModal(true);
         } else {
           console.error("Failed to fetch activity types:", data.message);
         }
@@ -244,7 +244,7 @@ function StartActivity() {
           <tbody>
           {ongoingActivities.map((activity, index) => (
             <tr key={index}>
-              <td>{activity.SN}</td> {/* Ensure property names are correct */}
+              <td>{activity.SN}</td>
               <td>{activity.NAME}</td>
               <td>{activity.EMAIL}</td>
               <td>{activity.UnitName}</td>
