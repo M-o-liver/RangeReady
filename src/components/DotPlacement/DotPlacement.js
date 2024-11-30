@@ -49,11 +49,13 @@ function DotPlacement() {
         // Handle the response (success or failure)
         console.log("Success:", data);
         alert("Activity data submitted successfully!");
+        navigate("/start-activity");
       })
       .catch((error) => {
         // Handle any errors
         console.error("Error:", error);
         alert("Error submitting activity data.");
+        navigate("/start-activity");
       });
   };
 
@@ -64,7 +66,7 @@ function DotPlacement() {
 
   return (
     <div className="dot-placement">
-      <h2>Click on the image to place dots</h2>>
+      <h2>Click on the image to place dots</h2>
 
       {/* Image and Dot Placement */}
       <div className="image-container" style={{ position: "relative" }}>
