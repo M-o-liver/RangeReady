@@ -39,15 +39,11 @@ jobs:
         curl -sS https://getcomposer.org/installer | php
         sudo mv composer.phar /usr/local/bin/composer
 
-        # Navigate to the 'api' folder and install PHP dependencies
-        cd ./build/api
-        composer install --no-interaction
-
-    - name: Install Guzzle with Composer
-      run: |
-        # Install Guzzle via Composer
+        # Navigate to the 'api' folder and install Guzzle and PHP dependencies
         cd ./build/api
         composer require guzzlehttp/guzzle
+
+        composer install --no-interaction
 
     - name: Deploy /build to Hostinger
       env:
