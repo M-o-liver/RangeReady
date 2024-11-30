@@ -1,5 +1,6 @@
-// src/App.js
 import React, { useState } from "react";
+import LoginForm from "./components/LoginForm/LoginForm";
+import Menu from "./components/Menu/Menu";
 
 function App() {
   const [username, setUsername] = useState("");
@@ -42,40 +43,20 @@ function App() {
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
       {!isLoggedIn ? (
-        <div>
-          <h1>Login</h1>
-          <form onSubmit={handleLogin}>
-            <div>
-              <label>
-                Username:
-                <input
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Password:
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </label>
-            </div>
-            <button type="submit">Login</button>
-          </form>
-          {message && <p style={{ color: "red" }}>{message}</p>}
-        </div>
+        <LoginForm 
+          username={username} 
+          password={password} 
+          setUsername={setUsername} 
+          setPassword={setPassword} 
+          message={message} 
+          handleLogin={handleLogin} 
+        />
       ) : (
         <div>
           <h1>Welcome, {username}!</h1>
           <p>You have successfully logged in.</p>
           <button onClick={handleLogout}>Logout</button>
+          <Menu />
         </div>
       )}
     </div>
