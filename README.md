@@ -75,4 +75,5 @@ git clone [repository-url]
 # Configure database
 [Database configuration steps to be added] Will be manual install of .zip
 
-# Launch application
+# Launch application - Hosted on:
+[hackfd-rangeready.ca](https://hackfd-rangeready.ca/)
