@@ -79,7 +79,7 @@ function GraphPage() {
           type="text"
           value={sn}
           onChange={handleInputChange}
-          placeholder="Enter Service Number (SN)"
+          placeholder="Enter SN"
         />
         <button onClick={fetchGraphData}>Generate Graph</button>
       </div>
