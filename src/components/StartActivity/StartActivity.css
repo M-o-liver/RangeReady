@@ -16,7 +16,6 @@ th, td {
 
 button {
   padding: 8px 12px;
-  padding-top: 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -58,9 +57,10 @@ input[type="email"] {
 
 .add-row-button {
   margin-right: 20px;
+  margin-top: 20px
 }
 
-.add-row-button {
+.register-button {
   margin-right: 20px;
 }
 
@@ -85,4 +85,11 @@ input[type="email"] {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-width: 300px;
   max-width: 500px;
+}
+
+.separator {
+  width: 100%;
+  height: 2px; /* Adjust height for the thickness of the line */
+  background-color: #ddd; /* Line color */
+  margin: 20px 0; /* Space before and after the line */
 }

@@ -249,8 +249,11 @@ function StartActivity() {
           </tbody>
         </table>
         <button className="add-row-button" onClick={addRow}>Add Row</button>
-        <button onClick={handleSubmit}>Register</button>
+        <button className="register-button" onClick={handleSubmit}>Register</button>
       </div>
+
+      {/* Separator between Create Activity and Ongoing Activity */}
+      <div className="separator"></div>
 
       {/* Bottom Section */}
       <div className="ongoing-activity">
