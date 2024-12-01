@@ -30,8 +30,8 @@ function Menu({ handleLogout }) {
         </li>
         <li>
         <select onChange={handleSelectChange} className="menu-select">
-            <option value="" disabled selected>
-              Select Graph or Stats
+            <option value="">
+              Graph or Stats
             </option>
             <option value="graph">Graph</option>
             <option value="stats">Stats</option>
