@@ -6,11 +6,14 @@
 table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: auto;
 }
 
 th, td {
   padding: 8px;
   text-align: left;
+  word-wrap: break-word;
+  white-space: normal;
   border-bottom: 1px solid #ddd;
 }
 
@@ -147,4 +150,9 @@ input[type="email"] {
 
 h2 {
   padding-bottom: 20px;
+}
+
+select {
+  width: 100%; /* Ensures select boxes also stretch */
+  box-sizing: border-box;
 }
