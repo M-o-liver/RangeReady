@@ -78,7 +78,6 @@ if ($method == 'POST') {
         $response = getOnGoingActivity();
         echo json_encode($response);
     } elseif ($requestPath == '/api/getOnGoingActivityType') {
-        // Ensure activityName is set
         if (isset($_GET['activityName'])) {
             $data = ['activityName' => $_GET['activityName']];
             $response = getOnGoingActivityType($data);
@@ -87,6 +86,17 @@ if ($method == 'POST') {
             echo json_encode([
                 'success' => false,
                 'message' => 'Activity name is required'
+            ]);
+        }
+    } elseif ($requestPath == '/api/getGraphData') {
+        if (isset($_GET['SN'])) {
+            $data = ['SN' => $_GET['SN']];
+            $response = getGraphData($data);
+            echo json_encode($response);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'SN is required'
             ]);
         }
     } else {

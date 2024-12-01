@@ -254,6 +254,71 @@ function getOnGoingActivity() {
     }
 }
 
+
+
+
+
+
+function getGraphData($data) {
+    global $pdo;
+
+    // Validate input data
+    if (empty($data['SN'])) {
+        http_response_code(400);  // Bad Request
+        return [
+            'success' => false,
+            'message' => 'SN is required'
+        ];
+    }
+
+    $sNum = $data['SN'];
+
+    try {
+        // Prepare the query to fetch activity types based on the provided activity name
+        $stmt = $pdo->prepare("
+            SELECT createdAt, Coordinates
+            FROM ActivityEvent
+            WHERE SN = :SN
+        ");
+
+        // Bind the activity name to the placeholder
+        $stmt->bindParam(':SN', $sNum, PDO::PARAM_STR);
+
+        // Execute the query
+        $stmt->execute();
+
+        // Fetch the results
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Check if results are found
+        if ($results) {
+            http_response_code(200);  // OK
+            return [
+                'success' => true,
+                'data' => $results
+            ];
+        } else {
+            // If no matching activities were found
+            http_response_code(404);  // Not Found
+            return [
+                'success' => false,
+                'message' => 'No activity found'
+            ];
+        }
+    } catch (Exception $e) {
+        // Log the error details for debugging
+        error_log($e->getMessage());
+        error_log($e->getTraceAsString());
+
+        // Handle general exceptions
+        http_response_code(500);  // Internal Server Error
+        return [
+            'success' => false,
+            'message' => 'An error occurred. Please try again later.'
+        ];
+    }
+}
+
 function getOnGoingActivityType($data) {
     global $pdo;
 
