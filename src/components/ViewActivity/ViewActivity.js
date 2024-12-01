@@ -73,7 +73,7 @@ function ViewActivity() {
           placeholder="Enter SN"
         />
         <button onClick={handleFetchCoordinates} disabled={loading}>
-          {loading ? "Loading..." : "Fetch Coordinates"}
+          {loading ? "Loading..." : "Fetch bullet shots"}
         </button>
       </div>
 
