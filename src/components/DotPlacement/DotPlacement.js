@@ -26,6 +26,8 @@ function DotPlacement() {
   // Submit the data to the API
   const handleSubmit = async () => {
     try {
+
+      /*
       console.log("Batman \n" + JSON.stringify(dots));
       const formattedDots = dots.map((dot) => `[${dot.x}, ${dot.y}]`).join(", ");
       console.log("Batman 2 \n" + formattedDots);
@@ -62,6 +64,8 @@ function DotPlacement() {
       // Extract group_size from the response
       const groupSize =
         groupScoreData?.executionResult?.success?.returnValue?.group_size || 0;
+*/
+        const groupSize = 1;
   
       // Prepare the data to be sent in the POST request
       const postData = {
