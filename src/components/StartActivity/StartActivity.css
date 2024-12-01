@@ -9,7 +9,7 @@ h2 {
 
 .create-activity,
 .ongoing-activity {
-  margin-bottom: 30px;
+  margin-bottom: 40px; /* Increase the margin to create space between the sections */
 }
 
 label {
@@ -19,24 +19,8 @@ label {
 
 select,
 input {
-  padding: 8px 12px; /* Increased padding for better clickability */
+  padding: 5px;
   margin: 5px 0;
-  width: 100%; /* Ensures inputs and selects expand to fill container */
-}
-
-button {
-  padding: 10px 20px; /* Larger buttons for better accessibility */
-  margin: 10px 5px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px; /* Improve readability */
-}
-
-button:hover {
-  background-color: #0056b3; /* Hover effect */
 }
 
 .activity-table,
@@ -46,7 +30,6 @@ button:hover {
   margin-top: 10px;
   background-color: #04471C;
   border: 2px solid #8B9862;
-  table-layout: fixed; /* Fixes table column width */
 }
 
 .activity-table th,
@@ -54,12 +37,9 @@ button:hover {
 .ongoing-table th,
 .ongoing-table td {
   border: 1px solid #8B9862;
-  padding: 12px 15px; /* Added more padding for better spacing */
+  padding: 10px;
   text-align: left;
   color: white;
-  overflow-wrap: break-word; /* Handles long text like emails */
-  word-wrap: break-word;
-  word-break: break-all; /* Prevents overflow of long strings */
 }
 
 .activity-table th,
@@ -69,24 +49,18 @@ button:hover {
   letter-spacing: 1px;
 }
 
-input[type="text"],
-input[type="email"],
-select {
-  width: 100%; /* Allow inputs to take up full column width */
-  box-sizing: border-box; /* Prevents padding from affecting width */
+button {
+  padding: 8px 12px;
+  margin: 10px 5px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-input[type="text"],
-input[type="email"] {
-  min-width: 150px; /* Ensures inputs don't get too small */
-}
-
-td button {
-  padding: 8px 12px; /* Button size for actions */
-}
-
-td select {
-  width: 100%; /* Ensure select dropdown is fully expanded */
+button:hover {
+  background-color: #0056b3;
 }
 
 /* Modal styles */
@@ -96,25 +70,23 @@ td select {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
 }
 
 .modal-content {
-  background: white;
+  background-color: white;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 4px;
   width: 400px;
-  text-align: center;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .modal-buttons button {
@@ -122,10 +94,9 @@ td select {
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
 }
 
 .modal-buttons button:hover {
-  background-color: #0056b3; /* Hover effect for modal buttons */
+  background-color: #0056b3;
 }
