@@ -5,6 +5,7 @@ import Menu from "./components/Menu/Menu";
 import StartActivity from "./components/StartActivity/StartActivity";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DotPlacement from "./components/DotPlacement/DotPlacement";
+import GraphPage from "./components/GraphPage/GraphPage";
 
 function App() {
   useEffect(() => {
@@ -82,6 +83,7 @@ function App() {
                 <Route path="/" element={<div>Welcome to Range Ready!</div>} />
                 <Route path="/start-activity" element={<StartActivity />} />
                 <Route path="/dot-placement" element={<DotPlacement />} />
+                <Route path="/graph" element={<GraphPage />} /> {}
               </Routes>
             </div>
           </div>
