@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
+import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
 
 function DotPlacement() {
+  const { state } = useLocation(); // Get the state from the router
+  const { sn, activityType, activityName } = state || {}; // Destructure sn and activityType from the state
   const [dots, setDots] = useState([]); // Store dot coordinates
+  const [selectedActivityType] = useState(activityType || ""); // Store selected activity type from state
   const imageUrl = "./img/Target.jpg";
 
   const navigate = useNavigate(); // Hook to navigate programmatically
@@ -22,65 +25,37 @@ function DotPlacement() {
 
   // Submit the data to the API
   const handleSubmit = () => {
-    // Prepare the data to be sent in the POST request for the external API
+    // Prepare the data to be sent in the POST request
     const postData = {
-      parameters: {
-        event: {
-          coordinates: [
-            [557.5, 800],
-            [580.5, 760],
-            [567.5, 840],
-            [515.5, 890],
-            [549.5, 720],
-          ],
-          num_clusters: 1
-        }
-      }
+      sn, // SN passed from the parent component via navigate state
+      activityName,
+      activityType: selectedActivityType, // Selected Activity Type
+      coordinates: dots, // Coordinates of placed dots
     };
-  
-    console.log("Request Body for External API:", postData);
-  
-    // First, send a POST request to the external API (spruce.palantircloud.com)
-    fetch("https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped", {
+
+    console.log("Request Body:", postData);
+
+    // Send a POST request to the API
+    fetch("https://hackfd-rangeready.ca/api/insertActivityData", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w"
+        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
       },
       body: JSON.stringify(postData),
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle the response from the external API
-        console.log("External API Success:", data);
-        
-        // Now, proceed with the local API call to insert activity data
-        fetch("https://hackfd-rangeready.ca/api/insertActivityData", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
-          },
-          body: JSON.stringify(postData), // Using the same data, adjust if necessary
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            // Handle the response (success or failure)
-            console.log("Success:", data);
-            alert("Activity data submitted successfully!");
-            navigate("/start-activity");
-          })
-          .catch((error) => {
-            // Handle any errors from the local API
-            console.error("Error:", error);
-            alert("Error submitting activity data.");
-            navigate("/start-activity");
-          });
+        // Handle the response (success or failure)
+        console.log("Success:", data);
+        alert("Activity data submitted successfully!");
+        navigate("/start-activity");
       })
       .catch((error) => {
-        // Handle any errors from the external API
-        console.error("External API Error:", error);
-        alert("Error communicating with external API.");
+        // Handle any errors
+        console.error("Error:", error);
+        alert("Error submitting activity data.");
+        navigate("/start-activity");
       });
   };
 
