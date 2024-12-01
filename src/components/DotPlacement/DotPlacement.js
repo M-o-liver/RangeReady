@@ -138,9 +138,9 @@ function DotPlacement() {
 
       {/* Dot Actions */}
       <div className="dot-actions" style={{ marginTop: "10px" }}>
+      <button className="pad-right" onClick={handleClose}>Cancel</button> {}
         <button className="pad-right" onClick={handleUndo}>Undo</button>
-        <button className="pad-right"onClick={handleSubmit}>Submit</button>
-        <button onClick={handleClose}>Close</button> {/* Close Button */}
+        <button onClick={handleSubmit}>Submit</button>
       </div>
     </div>
   );
