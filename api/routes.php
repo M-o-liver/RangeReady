@@ -446,12 +446,13 @@ function insertActivityData($data) {
         $coordinates = json_encode($data['coordinates']); // Stored as a JSON string
 
         // Step 3: Insert into ActivityEvent table
-        $query = "INSERT INTO ActivityEvent (RefActDet, SN, createdAt, Coordinates) VALUES (:refActDetId, :sn, NOW(), :coordinates)";
+        $query = "INSERT INTO ActivityEvent (RefActDet, SN, createdAt, Coordinates, GroupScore) VALUES (:refActDetId, :sn, NOW(), :coordinates, :groupSize)";
         $stmt = $pdo->prepare($query);
         $stmt->execute([
             'refActDetId' => $refActDetId,
             'sn' => $data['sn'],
-            'coordinates' => $coordinates
+            'coordinates' => $coordinates,
+            'groupSize' => $data['groupSize']
         ]);
 
         // Set HTTP status code for success (200 OK)

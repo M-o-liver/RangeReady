@@ -24,40 +24,72 @@ function DotPlacement() {
   };
 
   // Submit the data to the API
-  const handleSubmit = () => {
-    // Prepare the data to be sent in the POST request
-    const postData = {
-      sn, // SN passed from the parent component via navigate state
-      activityName,
-      activityType: selectedActivityType, // Selected Activity Type
-      coordinates: dots, // Coordinates of placed dots
-    };
-
-    console.log("Request Body:", postData);
-
-    // Send a POST request to the API
-    fetch("https://hackfd-rangeready.ca/api/insertActivityData", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
-      },
-      body: JSON.stringify(postData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Handle the response (success or failure)
-        console.log("Success:", data);
-        alert("Activity data submitted successfully!");
-        navigate("/start-activity");
-      })
-      .catch((error) => {
-        // Handle any errors
-        console.error("Error:", error);
-        alert("Error submitting activity data.");
-        navigate("/start-activity");
+  const handleSubmit = async () => {
+    try {
+      const formattedDots = dots.map((dot) => `[${dot[0]}, ${dot[1]}]`).join(", ");
+  
+      // Fetch the group_size from the external API
+      const groupScoreResponse = await fetch(
+        "https://spruce.palantircloud.com/function-executor/api/functions/ri.function-registry.main.function.a5be4bde-2de3-4e03-858a-2e1e4ba9a308/versions/0.0.4/executeUntyped",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization:
+              "Bearer eyJwbG50ciI6Im41Mi92Z0VUU0ZTYXkvb3VmUEplVnc9PSIsImFsZyI6IkVTMjU2In0.eyJzdWIiOiJDRWI2c3FtUlFyRzBORFZxV1NsdkpRPT0iLCJqdGkiOiJza09EOTdmeVFsV3dmb2o3MGw1bDB3PT0iLCJvcmciOiJNMXQrbFA3Q1FsYXpNSHc3cVV1cnpnPT0ifQ.ctDWRgg2jHrQ3bINX_lZcJCkeEi26amednl3EWwr-YZ0D8NaUYd7T4mtWfNnFDQoH23OxkvyHq2p2Eh2pKyb7w",
+          },
+          body: JSON.stringify({
+            parameters: {
+              event: {
+                coordinates: JSON.parse(`[${formattedDots}]`), // Convert to array format
+                num_clusters: 1,
+              },
+            },
+          }),
+        }
+      );
+  
+      const groupScoreData = await groupScoreResponse.json();
+  
+      // Extract group_size from the response
+      const groupSize =
+        groupScoreData?.executionResult?.success?.returnValue?.group_size || 0;
+  
+      // Prepare the data to be sent in the POST request
+      const postData = {
+        sn, // SN passed from the parent component via navigate state
+        activityName,
+        activityType: selectedActivityType, // Selected Activity Type
+        coordinates: dots, // Coordinates of placed dots
+        groupSize, // New field from external API response
+      };
+  
+      console.log("Request Body:", postData);
+  
+      // Send a POST request to the API
+      const response = await fetch("https://hackfd-rangeready.ca/api/insertActivityData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
+        },
+        body: JSON.stringify(postData),
       });
+  
+      const data = await response.json();
+  
+      // Handle the response (success or failure)
+      console.log("Success:", data);
+      alert("Activity data submitted successfully!");
+      navigate("/start-activity");
+    } catch (error) {
+      // Handle any errors
+      console.error("Error:", error);
+      alert("Error submitting activity data.");
+      navigate("/start-activity");
+    }
   };
+  
 
   // Close the activity page and return to the previous page
   const handleClose = () => {
