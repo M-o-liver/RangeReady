@@ -70,7 +70,6 @@ function GraphPage() {
 
   return (
     <div>
-      <h1>Graph Page</h1>
       <p>For Demo use: P12 456 789</p>
 
       {/* Input field to capture the SN */}

@@ -59,12 +59,10 @@ function ViewActivity() {
 
   return (
     <div>
-      <h1>View Activity</h1>
       <p>Enter the SN to view the last target hits.</p>
 
       {/* SN Input field */}
       <div>
-        <label htmlFor="sn">SN:</label>
         <input
           type="text"
           id="sn"
