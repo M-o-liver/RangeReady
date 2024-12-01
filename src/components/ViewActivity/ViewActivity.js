@@ -18,33 +18,44 @@ function ViewActivity() {
       alert("Please enter a valid SN.");
       return;
     }
-
+  
     setLoading(true); // Show loading state
     setError(""); // Clear previous error
-
+  
     try {
-        const response = await fetch(`https://hackfd-rangeready.ca/api/getShooter?SN=${sn}`, {
-          method: "GET", // Specify GET method
-          headers: {
-            "Content-Type": "application/json", // Set content type
-            Authorization: "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=", // Authorization header
-          },
-        });
-    
-        const data = await response.json();
-        if (data.coordinates && Array.isArray(data.coordinates)) {
-          setDots(data.coordinates); // Update the dots with fetched coordinates
+      const response = await fetch(`https://hackfd-rangeready.ca/api/getShooter?SN=${sn}`, {
+        method: "GET", // Specify GET method
+        headers: {
+          "Content-Type": "application/json", // Set content type
+          Authorization: "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=", // Authorization header
+        },
+      });
+  
+      const data = await response.json();
+  
+      if (data.success && data.data && data.data.length > 0) {
+        const coordinatesString = data.data[0].Coordinates;
+  
+        // Parse the coordinates string into a JavaScript object
+        const coordinates = JSON.parse(coordinatesString);
+  
+        if (Array.isArray(coordinates)) {
+          setDots(coordinates); // Update the dots with parsed coordinates
         } else {
-          setError("No coordinates found for this SN.");
-          setDots([]); // Reset dots if no data found
+          setError("Invalid coordinate data format.");
+          setDots([]); // Reset dots if data is invalid
         }
-      } catch (error) {
-        setError("Error fetching data.");
-        console.error(error);
-      } finally {
-        setLoading(false); // Hide loading spinner
+      } else {
+        setError("No coordinates found for this SN.");
+        setDots([]); // Reset dots if no data found
       }
-    };
+    } catch (error) {
+      setError("Error fetching data.");
+      console.error(error);
+    } finally {
+      setLoading(false); // Hide loading spinner
+    }
+  };
 
   return (
     <div>
