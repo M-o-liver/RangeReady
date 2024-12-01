@@ -1,5 +1,7 @@
 # HackFD: CADTC Team Four!
 
+Hackathon project presentation link: [PowerPoint on SharePoint](https://018gc-my.sharepoint.com/:p:/g/personal/justin_monge_ecn_forces_gc_ca/EY-Gl_RUuMpJio39IY76zcgBE7ze5VIZ2OQSTvyQnEoZTQ?e=IC5njP)
+
 # Range Ready
 
 Range Ready is a web application designed to transform how the Canadian Armed Forces (CAF) tracks and analyzes range performance data. By integrating and digitizing the rich analog corporate knowledge of the Canadian Army, Range Ready will not only support operational efficiency and readiness but also fosters a spirit of competition and individual motivation among soldiers.
