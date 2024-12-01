@@ -18,13 +18,15 @@ function Menu({ handleLogout }) {
   return (
     <div className="menu-bar">
       <ul className="menu-list">
-        <li>
+      <li>
           <Link to="/start-activity">
             <button>Register Activity</button>
           </Link>
         </li>
         <li>
-          <button onClick={() => navigate("/")}>View Activity</button>
+          <Link to="/view-activity">
+            <button>View Activity</button> {/* Link to View Activity page */}
+          </Link>
         </li>
         <li>
           <select onChange={handleSelectChange} className="menu-select">

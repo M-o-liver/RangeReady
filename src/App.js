@@ -6,6 +6,7 @@ import StartActivity from "./components/StartActivity/StartActivity";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DotPlacement from "./components/DotPlacement/DotPlacement";
 import GraphPage from "./components/GraphPage/GraphPage";
+import ViewActivity from "./components/ViewActivity/ViewActivity";
 
 function App() {
   useEffect(() => {
@@ -84,6 +85,7 @@ function App() {
                 <Route path="/start-activity" element={<StartActivity />} />
                 <Route path="/dot-placement" element={<DotPlacement />} />
                 <Route path="/graph" element={<GraphPage />} /> {}
+                <Route path="/view-activity" element={<ViewActivity />} />
               </Routes>
             </div>
           </div>
