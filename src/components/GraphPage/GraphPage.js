@@ -25,13 +25,20 @@ function GraphPage() {
   // Fetch graph data from the API
   const fetchGraphData = async () => {
     if (!sn) {
-      alert("Please enter a serial number.");
+      alert("Please enter a service number.");
       return;
     }
 
     try {
-      const response = await fetch(`https://hackfd-rangeready.ca/api/getGraphData?SN=${sn}`);
-      const data = await response.json();
+        const response = await fetch(`https://hackfd-rangeready.ca/api/getGraphData?SN=${sn}`, {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Basic QWRtaW5pc3RyYXRvcjpSYW5nZXJlYWR5ITE=",
+          },
+        });
+        
+        const data = await response.json();
 
       if (data.success) {
         // Prepare the data for the chart
@@ -72,7 +79,7 @@ function GraphPage() {
           type="text"
           value={sn}
           onChange={handleInputChange}
-          placeholder="Enter Serial Number (SN)"
+          placeholder="Enter Service Number (SN)"
         />
         <button onClick={fetchGraphData}>Generate Graph</button>
       </div>
