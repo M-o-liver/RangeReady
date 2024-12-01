@@ -305,7 +305,7 @@ function StartActivity() {
           </select>
           <div className="modal-buttons">
             <button className="cancel-button" onClick={() => setShowModal(false)}>Cancel</button>
-            <button onClick={handleNext}>Next</button>
+            <button className="next-button" onClick={handleNext}>Next</button>
           </div>
         </div>
       </div>
