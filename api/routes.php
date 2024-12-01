@@ -276,7 +276,7 @@ function getGraphData($data) {
     try {
         // Prepare the query to fetch activity types based on the provided activity name
         $stmt = $pdo->prepare("
-            SELECT createdAt, Coordinates
+            SELECT createdAt, GroupScore
             FROM ActivityEvent
             WHERE SN = :SN
         ");
