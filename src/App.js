@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Menu from "./components/Menu/Menu";
 import StartActivity from "./components/StartActivity/StartActivity";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import DotPlacement from "./components/DotPlacement/DotPlacement";
 import GraphPage from "./components/GraphPage/GraphPage";
 import ViewActivity from "./components/ViewActivity/ViewActivity";
@@ -17,6 +17,14 @@ function App() {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [message, setMessage] = useState("");
+
+  // Persist login state on page reload
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn");
+    if (loggedIn === "true") {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,6 +41,7 @@ function App() {
 
       if (response.ok) {
         setIsLoggedIn(true);
+        localStorage.setItem("isLoggedIn", "true");  // Save login state in localStorage
       } else {
         const errorData = await response.json();
         setMessage("Login failed: " + (errorData.message || "Invalid credentials"));
@@ -48,6 +57,7 @@ function App() {
     setUsername("");
     setPassword("");
     setMessage("");
+    localStorage.removeItem("isLoggedIn");  // Remove login state on logout
   };
 
   return (
@@ -79,12 +89,12 @@ function App() {
               color: '#FFFFFF'
             }}>
               <h1 style={{ color: 'white' }}>Welcome, {username}!</h1>
-              <Menu handleLogout={handleLogout} />  {}
+              <Menu handleLogout={handleLogout} />
               <Routes>
-                <Route path="/" element={<div>Welcome to Range Ready!</div>} />
+                <Route path="/" element={<Navigate to="/start-activity" />} />
                 <Route path="/start-activity" element={<StartActivity />} />
                 <Route path="/dot-placement" element={<DotPlacement />} />
-                <Route path="/graph" element={<GraphPage />} /> {}
+                <Route path="/graph" element={<GraphPage />} />
                 <Route path="/view-activity" element={<ViewActivity />} />
               </Routes>
             </div>
