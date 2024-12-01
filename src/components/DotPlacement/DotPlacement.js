@@ -26,7 +26,9 @@ function DotPlacement() {
   // Submit the data to the API
   const handleSubmit = async () => {
     try {
+      console.log("Batman \n" + dots);
       const formattedDots = dots.map((dot) => `[${dot[0]}, ${dot[1]}]`).join(", ");
+      console.log("Batman 2 \n" + formattedDots);
 
       // Prepare the body for the request
       const requestBody = {
