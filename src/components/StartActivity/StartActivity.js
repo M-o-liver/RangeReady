@@ -168,7 +168,7 @@ function StartActivity() {
       .then((data) => {
         if (data.success) {
           alert("Activity Registered Successfully!");
-          navigate("/start-activity");
+          window.location.reload();
         } else {
           alert("Error registering activity: " + data.message);
           navigate("/start-activity");
