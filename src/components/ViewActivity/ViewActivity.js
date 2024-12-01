@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './ViewActivity.css';
 
 function ViewActivity() {
   const [sn, setSn] = useState(""); // State to store SN input
@@ -64,6 +65,7 @@ function ViewActivity() {
       {/* SN Input field */}
       <div>
         <input
+          className="right-pad"
           type="text"
           id="sn"
           value={sn}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import './GraphPage.css';
 
 // Register the chart components
 ChartJS.register(
@@ -75,6 +76,7 @@ function GraphPage() {
       {/* Input field to capture the SN */}
       <div>
         <input
+          className="right-pad"
           type="text"
           value={sn}
           onChange={handleInputChange}
