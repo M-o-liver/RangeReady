@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation and useNavigate
+import './DotPlacement.css';
 
 function DotPlacement() {
   const { state } = useLocation(); // Get the state from the router
@@ -137,8 +138,8 @@ function DotPlacement() {
 
       {/* Dot Actions */}
       <div className="dot-actions" style={{ marginTop: "10px" }}>
-        <button onClick={handleUndo}>Undo</button>
-        <button onClick={handleSubmit}>Submit</button>
+        <button className="pad-right" onClick={handleUndo}>Undo</button>
+        <button className="pad-right"onClick={handleSubmit}>Submit</button>
         <button onClick={handleClose}>Close</button> {/* Close Button */}
       </div>
     </div>
