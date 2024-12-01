@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTable } from "react-table";
+import "./StartActivity.css"; // Assume we add some custom CSS for styling
 
 function StartActivity() {
   const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]);
   const [activity, setActivity] = useState("");
   const [activities, setActivities] = useState([]);
-  const [units, setUnits] = useState([]);
+  const [setUnits] = useState([]);
   const [ongoingActivities, setOngoingActivities] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
-  const [activityTypes, setActivityTypes] = useState([]); // Store activity types for dropdown
-  const [selectedActivityType, setSelectedActivityType] = useState(""); // Store selected activity type
+  const [showModal, setShowModal] = useState(false); 
+  const [activityTypes, setActivityTypes] = useState([]); 
+  const [selectedActivityType, setSelectedActivityType] = useState(""); 
   const navigate = useNavigate();
   const [selectedSN, setSelectedSN] = useState(null);
   const [selectedActivityName, setSelectedActivityName] = useState(null);
@@ -32,7 +34,6 @@ function StartActivity() {
       })
       .catch((error) => console.error("Error fetching activity options:", error));
 
-    // Fetch unit options
     fetch("https://hackfd-rangeready.ca/api/getUnitOptions", {
       method: "GET",
       headers: {
@@ -49,7 +50,6 @@ function StartActivity() {
       })
       .catch((error) => console.error("Error fetching unit options:", error));
 
-    // Fetch ongoing activity data
     fetch("https://hackfd-rangeready.ca/api/getOnGoingActivity", {
       method: "GET",
       headers: {
@@ -77,7 +77,7 @@ function StartActivity() {
     setSelectedActivityName(activityName);
 
     const url = `https://hackfd-rangeready.ca/api/getOnGoingActivityType?activityName=${encodeURIComponent(activityName)}`;
-  
+
     fetch(url, {
       method: "GET",
       headers: {
@@ -88,7 +88,6 @@ function StartActivity() {
       .then((data) => {
         if (data.success) {
           setActivityTypes(data.data);
-          console.log("Fetched Activity Types:", data.data);
           setShowModal(true);
         } else {
           console.error("Failed to fetch activity types:", data.message);
@@ -102,12 +101,8 @@ function StartActivity() {
   };
 
   const handleNext = () => {
-    console.log("Next button clicked with activity type:", selectedActivityType);
-    console.log("Selected SN:", selectedSN);
-    console.log("Selected selectedActivityName:", selectedActivityName);
-    // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
     navigate("/dot-placement", { state: { sn: selectedSN, activityName: selectedActivityName, activityType: selectedActivityType } });
-    setShowModal(false); // Close the modal
+    setShowModal(false); 
   };
 
   const addRow = () => {
@@ -169,6 +164,60 @@ function StartActivity() {
       .catch((error) => alert("Error registering activity!"));
   };
 
+  // Columns for Create Activity Table
+  const createActivityColumns = React.useMemo(
+    () => [
+      { Header: "SN", accessor: "sn" },
+      { Header: "Name", accessor: "name" },
+      { Header: "Email", accessor: "email" },
+      { Header: "Unit", accessor: "unit" },
+      {
+        Header: "Actions",
+        accessor: "actions",
+        Cell: ({ row }) => (
+          <button onClick={() => removeRow(row.index)}>Remove</button>
+        ),
+      },
+    ],
+    []
+  );
+
+  // Columns for Ongoing Activity Table
+  const ongoingActivityColumns = React.useMemo(
+    () => [
+      { Header: "SN", accessor: "SN" },
+      { Header: "Name", accessor: "NAME" },
+      { Header: "Email", accessor: "EMAIL" },
+      { Header: "Unit", accessor: "UnitName" },
+      { Header: "Activity", accessor: "ActivityName" },
+      {
+        Header: "Actions",
+        accessor: "actions",
+        Cell: ({ row }) => (
+          <button onClick={() => handleAddData(row.index)}>Add Data</button>
+        ),
+      },
+    ],
+    []
+  );
+
+  // Use react-table hook
+  const { getTableProps, getTableBodyProps, headerGroups, rows: createActivityRows, prepareRow } = useTable({
+    columns: createActivityColumns,
+    data: rows,
+  });
+
+  const {
+    getTableProps: getOngoingTableProps,
+    getTableBodyProps: getOngoingTableBodyProps,
+    headerGroups: ongoingHeaderGroups,
+    rows: ongoingActivityRows,
+    prepareRow: prepareOngoingRow,
+  } = useTable({
+    columns: ongoingActivityColumns,
+    data: ongoingActivities,
+  });
+
   return (
     <div className="start-activity">
       {/* Top Section */}
@@ -182,120 +231,73 @@ function StartActivity() {
             </option>
           ))}
         </select>
-        <table>
+        <table {...getTableProps()}>
           <thead>
-            <tr>
-              <th>SN</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Unit</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td>
-                  <input
-                    type="text"
-                    value={row.sn}
-                    onChange={(e) => handleChange(index, "sn", e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    value={row.name}
-                    onChange={(e) =>
-                      handleChange(index, "name", e.target.value)
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="email"
-                    value={row.email}
-                    onChange={(e) =>
-                      handleChange(index, "email", e.target.value)
-                    }
-                  />
-                </td>
-                <td>
-                  <select
-                    value={row.unit}
-                    onChange={(e) => handleChange(index, "unit", e.target.value)}
-                  >
-                    <option value="">Select Unit</option>
-                    {units.map((unitOption, index) => (
-                      <option key={index} value={unitOption.Unit}>
-                        {unitOption.Unit}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <button onClick={() => removeRow(index)}>Remove</button>
-                </td>
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                ))}
               </tr>
             ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {createActivityRows.map(row => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         <button onClick={addRow}>Add Row</button>
-        <button onClick={handleSubmit}>Register</button>
       </div>
 
-      {/* Bottom Section */}
+      {/* Ongoing Activity */}
       <div className="ongoing-activity">
         <h2>Ongoing Activity</h2>
-        <table className="ongoing-table">
+        <table {...getOngoingTableProps()}>
           <thead>
-            <tr>
-              <th>SN</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Unit</th>
-              <th>Activity</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ongoingActivities.map((activity, index) => (
-              <tr key={index}>
-                <td>{activity.SN}</td>
-                <td>{activity.NAME}</td>
-                <td title={activity.EMAIL}>{activity.EMAIL.substring(0, 5)}...</td>
-                <td>{activity.UnitName}</td>
-                <td>{activity.ActivityName}</td>
-                <td>
-                  <button onClick={() => handleAddData(index)}>Add Data</button>
-                </td>
+            {ongoingHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                ))}
               </tr>
             ))}
+          </thead>
+          <tbody {...getOngoingTableBodyProps()}>
+            {ongoingActivityRows.map(row => {
+              prepareOngoingRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
-      {/* Modal for Activity Type */}
+      {/* Modal for Activity Types */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Select Activity Type</h3>
-            <select
-              value={selectedActivityType}
-              onChange={handleActivityTypeChange}
-            >
-              <option value="">Select Activity Type</option>
-              {activityTypes.map((activityType, index) => (
-                <option key={index} value={activityType.ActivityType}>
-                  {activityType.ActivityType}
-                </option>
-              ))}
-            </select>
-            <div className="modal-buttons">
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button onClick={handleNext}>Next</button>
-            </div>
-          </div>
+        <div className="modal">
+          <h3>Select Activity Type</h3>
+          <select onChange={handleActivityTypeChange}>
+            <option value="">Select Activity Type</option>
+            {activityTypes.map((type, index) => (
+              <option key={index} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleNext}>Next</button>
         </div>
       )}
     </div>
