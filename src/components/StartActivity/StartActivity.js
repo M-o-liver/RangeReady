@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import './StartActivity.css';
 
 function StartActivity() {
   const [rows, setRows] = useState([{ sn: "", name: "", email: "", unit: "" }]);
