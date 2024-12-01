@@ -78,7 +78,7 @@ function App() {
               minHeight: '100vh',
               color: '#FFFFFF'
             }}>
-              <h1>Welcome, {username}!</h1>
+              <h1 style={{ color: 'white' }}>Welcome, {username}!</h1>
               <Menu handleLogout={handleLogout} />  {}
               <Routes>
                 <Route path="/" element={<div>Welcome to Range Ready!</div>} />
