@@ -14,6 +14,7 @@ function StartActivity() {
   const navigate = useNavigate();
   const [selectedSN, setSelectedSN] = useState(null);
   const [selectedActivityName, setSelectedActivityName] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
 
   // Fetch activity options
   useEffect(() => {
@@ -92,6 +93,7 @@ function StartActivity() {
           console.log("Fetched Activity Types:", data.data);
           setShowModal(true);
         } else {
+          setFetchError("Failed to fetch activity types");
           console.error("Failed to fetch activity types:", data.message);
         }
       })
@@ -103,10 +105,15 @@ function StartActivity() {
   };
 
   const handleNext = () => {
+    if (!selectedActivityType) {
+      alert("Please select an activity type.");
+      return;
+    }
+
     console.log("Next button clicked with activity type:", selectedActivityType);
     console.log("Selected SN:", selectedSN);
     console.log("Selected selectedActivityName:", selectedActivityName);
-    // Implement what happens when 'Next' is clicked (e.g., save data or advance step)
+
     navigate("/dot-placement", { state: { sn: selectedSN, activityName: selectedActivityName, activityType: selectedActivityType } });
     setShowModal(false); // Close the modal
   };
@@ -278,27 +285,28 @@ function StartActivity() {
 
       {/* Modal for Activity Type */}
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Select Activity Type</h3>
-            <select
-              value={selectedActivityType}
-              onChange={handleActivityTypeChange}
-            >
-              <option value="">Select Activity Type</option>
-              {activityTypes.map((activityType, index) => (
-                <option key={index} value={activityType.ActivityType}>
-                  {activityType.ActivityType}
-                </option>
-              ))}
-            </select>
-            <div className="modal-buttons">
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-              <button onClick={handleNext}>Next</button>
-            </div>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h3>Select Activity Type</h3>
+          {fetchError && <p className="error-message">{fetchError}</p>}
+          <select
+            value={selectedActivityType}
+            onChange={handleActivityTypeChange}
+          >
+            <option value="">Select Activity Type</option>
+            {activityTypes.map((activityType, index) => (
+              <option key={index} value={activityType.ActivityType}>
+                {activityType.ActivityType}
+              </option>
+            ))}
+          </select>
+          <div className="modal-buttons">
+            <button onClick={() => setShowModal(false)}>Cancel</button>
+            <button onClick={handleNext}>Next</button>
           </div>
         </div>
-      )}
+      </div>
+    )}
     </div>
   );
 }
