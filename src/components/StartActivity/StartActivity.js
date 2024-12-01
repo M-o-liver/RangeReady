@@ -248,7 +248,7 @@ function StartActivity() {
             ))}
           </tbody>
         </table>
-        <button onClick={addRow}>Add Row</button>
+        <button className="add-row-button" onClick={addRow}>Add Row</button>
         <button onClick={handleSubmit}>Register</button>
       </div>
 
@@ -301,7 +301,7 @@ function StartActivity() {
             ))}
           </select>
           <div className="modal-buttons">
-            <button onClick={() => setShowModal(false)}>Cancel</button>
+            <button className="cancel-button" onClick={() => setShowModal(false)}>Cancel</button>
             <button onClick={handleNext}>Next</button>
           </div>
         </div>
