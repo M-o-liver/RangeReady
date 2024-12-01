@@ -36,3 +36,25 @@ button:hover {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+input[type="email"] {
+  width: 100%;
+  min-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.ongoing-activity {
+  margin-top: 50px;
+}
+
+.add-row-button {
+  margin-right: 20px;
+}
