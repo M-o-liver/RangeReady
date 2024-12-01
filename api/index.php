@@ -99,6 +99,17 @@ if ($method == 'POST') {
                 'message' => 'SN is required'
             ]);
         }
+    } elseif ($requestPath == '/api/getShooter') {
+        if (isset($_GET['SN'])) {
+            $data = ['SN' => $_GET['SN']];
+            $response = getShooter($data);
+            echo json_encode($response);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'SN is required'
+            ]);
+        }
     } else {
         echo json_encode([
             'success' => false,
