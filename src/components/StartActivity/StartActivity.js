@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Select from 'react-select';  // Import react-select
 import './StartActivity.css';
 
 function StartActivity() {
@@ -8,13 +9,13 @@ function StartActivity() {
   const [activities, setActivities] = useState([]);
   const [units, setUnits] = useState([]);
   const [ongoingActivities, setOngoingActivities] = useState([]);
-  const [showModal, setShowModal] = useState(false); // State to control modal visibility
-  const [activityTypes, setActivityTypes] = useState([]); // Store activity types for dropdown
-  const [selectedActivityType, setSelectedActivityType] = useState(""); // Store selected activity type
+  const [showModal, setShowModal] = useState(false);
+  const [activityTypes, setActivityTypes] = useState([]);
+  const [selectedActivityType, setSelectedActivityType] = useState("");
   const navigate = useNavigate();
   const [selectedSN, setSelectedSN] = useState(null);
   const [selectedActivityName, setSelectedActivityName] = useState(null);
-  const [fetchError, setFetchError] = useState(null);
+  const [setFetchError] = useState(null);
 
   // Fetch activity options
   useEffect(() => {
@@ -69,11 +70,9 @@ function StartActivity() {
       .catch((error) => console.error("Error fetching ongoing activities:", error));
   }, []);
 
-  // Fetch activity types when Add Data is clicked
   const handleAddData = (index) => {
     const activityData = ongoingActivities[index];
     const activityName = activityData.ActivityName;
-
     const sn = activityData.SN;
     setSelectedSN(sn);
     setSelectedActivityName(activityName);
@@ -90,18 +89,16 @@ function StartActivity() {
       .then((data) => {
         if (data.success) {
           setActivityTypes(data.data);
-          console.log("Fetched Activity Types:", data.data);
           setShowModal(true);
         } else {
           setFetchError("Failed to fetch activity types");
-          console.error("Failed to fetch activity types:", data.message);
         }
       })
       .catch((error) => console.error("Error fetching activity types:", error));
   };
 
-  const handleActivityTypeChange = (e) => {
-    setSelectedActivityType(e.target.value);
+  const handleActivityTypeChange = (selectedOption) => {
+    setSelectedActivityType(selectedOption ? selectedOption.value : '');
   };
 
   const handleNext = () => {
@@ -109,10 +106,6 @@ function StartActivity() {
       alert("Please select an activity type.");
       return;
     }
-
-    console.log("Next button clicked with activity type:", selectedActivityType);
-    console.log("Selected SN:", selectedSN);
-    console.log("Selected selectedActivityName:", selectedActivityName);
 
     navigate("/dot-placement", { state: { sn: selectedSN, activityName: selectedActivityName, activityType: selectedActivityType } });
     setShowModal(false); // Close the modal
@@ -171,7 +164,6 @@ function StartActivity() {
           navigate("/start-activity");
         } else {
           alert("Error registering activity: " + data.message);
-          navigate("/start-activity");
         }
       })
       .catch((error) => alert("Error registering activity!"));
@@ -182,14 +174,12 @@ function StartActivity() {
       {/* Top Section */}
       <div className="create-activity">
         <h2>Create Activity</h2>
-        <select onChange={(e) => setActivity(e.target.value)} value={activity}>
-          <option value="">Select Activity</option>
-          {activities.map((activityOption, index) => (
-            <option key={index} value={activityOption.Name}>
-              {activityOption.Name}
-            </option>
-          ))}
-        </select>
+        <Select
+          options={activities.map(activityOption => ({ value: activityOption.Name, label: activityOption.Name }))}
+          onChange={(selectedOption) => setActivity(selectedOption ? selectedOption.value : '')}
+          value={activity ? { value: activity, label: activity } : null}
+          placeholder="Select Activity"
+        />
         <table>
           <thead>
             <tr>
@@ -214,32 +204,23 @@ function StartActivity() {
                   <input
                     type="text"
                     value={row.name}
-                    onChange={(e) =>
-                      handleChange(index, "name", e.target.value)
-                    }
+                    onChange={(e) => handleChange(index, "name", e.target.value)}
                   />
                 </td>
                 <td>
                   <input
                     type="email"
                     value={row.email}
-                    onChange={(e) =>
-                      handleChange(index, "email", e.target.value)
-                    }
+                    onChange={(e) => handleChange(index, "email", e.target.value)}
                   />
                 </td>
                 <td>
-                  <select
-                    value={row.unit}
-                    onChange={(e) => handleChange(index, "unit", e.target.value)}
-                  >
-                    <option value="">Select Unit</option>
-                    {units.map((unitOption, index) => (
-                      <option key={index} value={unitOption.Unit}>
-                        {unitOption.Unit}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    options={units.map(unitOption => ({ value: unitOption.Unit, label: unitOption.Unit }))}
+                    value={row.unit ? { value: row.unit, label: row.unit } : null}
+                    onChange={(selectedOption) => handleChange(index, "unit", selectedOption ? selectedOption.value : '')}
+                    placeholder="Select Unit"
+                  />
                 </td>
                 <td>
                   <button onClick={() => removeRow(index)}>Remove</button>
@@ -252,7 +233,7 @@ function StartActivity() {
         <button className="register-button" onClick={handleSubmit}>Register</button>
       </div>
 
-      {/* Separator between Create Activity and Ongoing Activity */}
+      {/* Separator */}
       <div className="separator"></div>
 
       {/* Bottom Section */}
@@ -273,12 +254,12 @@ function StartActivity() {
             {ongoingActivities.map((activity, index) => (
               <tr key={index}>
                 <td>{activity.SN}</td>
-                <td>{activity.NAME}</td>
-                <td title={activity.EMAIL}>{activity.EMAIL.substring(0, 5)}...</td>
-                <td>{activity.UnitName}</td>
+                <td>{activity.Name}</td>
+                <td>{activity.Email}</td>
+                <td>{activity.Unit}</td>
                 <td>{activity.ActivityName}</td>
                 <td>
-                  <button onClick={() => handleAddData(index)}>Add Data</button>
+                  <button className="add-btn" onClick={() => handleAddData(index)}>Add Data</button>
                 </td>
               </tr>
             ))}
@@ -286,30 +267,22 @@ function StartActivity() {
         </table>
       </div>
 
-      {/* Modal for Activity Type */}
+      {/* Modal */}
       {showModal && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h3>Select Activity Type</h3>
-          {fetchError && <p className="error-message">{fetchError}</p>}
-          <select
-            value={selectedActivityType}
-            onChange={handleActivityTypeChange}
-          >
-            <option value="">Select Activity Type</option>
-            {activityTypes.map((activityType, index) => (
-              <option key={index} value={activityType.ActivityType}>
-                {activityType.ActivityType}
-              </option>
-            ))}
-          </select>
-          <div className="modal-buttons">
-            <button className="cancel-button" onClick={() => setShowModal(false)}>Cancel</button>
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Select Activity Type</h3>
+            <Select
+              options={activityTypes.map(type => ({ value: type.Name, label: type.Name }))}
+              onChange={handleActivityTypeChange}
+              value={selectedActivityType ? { value: selectedActivityType, label: selectedActivityType } : null}
+              placeholder="Select Activity Type"
+            />
             <button className="next-button" onClick={handleNext}>Next</button>
+            <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 }
